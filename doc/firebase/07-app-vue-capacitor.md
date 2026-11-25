@@ -1,4 +1,6 @@
-# 07 — Brancher l'app Vue + Capacitor
+# 07 — Brancher l'app Vue + Capacitor (option D)
+
+> Option B : ce doc ne s'applique pas, le code app est dans `04c-option-a.md` et `04d-option-b.md`. Seules les sections 1 (app Web) et « Build de l'APK » restent utiles.
 
 ## ✅ Checklist
 

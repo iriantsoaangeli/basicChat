@@ -1,5 +1,8 @@
 - [ ] firebase 
   - [ ]  Creer la base de donnees 
+  - [ ]  API : une seul lien /api qui dit : api en marche 
+    - [ ]  run test sur les liens existant 
+    - [ ]  Puis retourne un message et un status code 
   
 - [ ] vue.js
   - [ ] Initialiser le projet 

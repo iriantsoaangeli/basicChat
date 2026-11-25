@@ -27,6 +27,8 @@ Accepte les noms par défaut (`firestore.rules`, `firestore.indexes.json`, `stor
 
 ## 2. `firestore.rules`
 
+> ⚠️ **Option B (04c/04d) : saute cette étape**, utilise les règles de `04c-option-a.md`. La version ci-dessous (tout fermé) ne vaut que pour l'option D.
+
 ```
 rules_version = '2';
 service cloud.firestore {

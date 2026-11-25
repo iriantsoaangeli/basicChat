@@ -8,20 +8,29 @@ Dernière vérification des quotas : **25 nov. 2026** (source : https://firebase
 2. **Prends le plan Blaze** (carte bancaire obligatoire). Il inclut **les mêmes quotas gratuits que Spark + des quotas gratuits pour Functions et Storage**. Tant que tu restes dessous, tu paies 0.
 3. **Tu poses 4 garde-fous** pour ne pas te réveiller avec une facture : alerte budget, spend cap sur Functions, `maxInstances` bas, nettoyage auto des images Docker. → doc 08.
 
+## Deux façons de faire (détails : `Q&A.md`)
+
+| | **Option B — recommandée** | Option D — API complète |
+|---|---|---|
+| Principe | L'app lit/écrit Firestore **en direct** (SDK + règles de sécurité) + 3 petites fonctions pour push et tâche de nuit | Tout passe par une API que tu écris (Express ou Flask) |
+| Code serveur | ~80 lignes | ~150 lignes + toutes les routes à venir |
+| Docs | 04c + 04d | 04a ou 04b + 06 + 07 |
+
 ## Ordre de lecture / checklist globale
 
-| # | Doc | Ce que tu fais | Temps |
-|---|-----|----------------|-------|
-| 1 | `01-spark-vs-blaze.md` | Comprendre ce qui est gratuit et où | 5 min |
-| 2 | `02-creer-projet.md` | Créer le projet, passer en Blaze, créer Firestore + Storage, installer les outils | 30 min |
-| 3 | `03-choix-node-ou-python.md` | Choisir ton langage | 5 min |
-| 4 | `04a-api-typescript.md` **ou** `04b-api-python.md` | Écrire et déployer l'API | 30 min |
-| 5 | `05-fichiers-et-securite.md` | Upload photos/docs + règles de sécurité | 20 min |
-| 6 | `06-push-et-taches.md` | Notifications push + tâche planifiée | 20 min |
-| 7 | `07-app-vue-capacitor.md` | Brancher l'app Vue/Capacitor sur l'API | 20 min |
-| 8 | `08-anti-facture.md` | **À faire AVANT le premier déploiement public** | 15 min |
+| # | Option B (recommandée) | Option D | Ce que tu fais |
+|---|---|---|---|
+| 1 | `Q&A.md` + `01-spark-vs-blaze.md` | `01-spark-vs-blaze.md` | Comprendre ce qui est gratuit et comment ça marche |
+| 2 | `02-creer-projet.md` | `02-creer-projet.md` | Créer le projet, Blaze, Firestore, Storage, outils |
+| 2b | `02b-modeliser-ses-donnees.md` | idem | **Décider comment ranger tes données** (écrans → requêtes → documents) |
+| 3 | `03-choix-node-ou-python.md` | idem | Choisir le langage des fonctions |
+| 4 | `04c-option-a.md` | `04a-api-typescript.md` **ou** `04b-api-python.md` | Données + règles |
+| 5 | `04d-option-b.md` | `06-push-et-taches.md` | Notifs push + tâche planifiée |
+| 6 | `05-fichiers-et-securite.md` (règles **Storage** seulement) | `05-fichiers-et-securite.md` | Upload photos/docs |
+| 7 | (déjà dans 04c/04d) | `07-app-vue-capacitor.md` | Brancher l'app Vue/Capacitor |
+| 8 | `08-anti-facture.md` | `08-anti-facture.md` | **AVANT le premier déploiement** |
 
-## Architecture retenue (et pourquoi)
+## Architecture de l'option D (docs 04a/04b, 06, 07)
 
 ```
 App Vue (APK Capacitor)
