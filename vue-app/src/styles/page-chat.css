@@ -3,12 +3,76 @@
    Utilisé par : src/views/ChatView.vue
    ================================================================ */
 
-/* Barre du bas : fine, avec un peu de marge autour du champ */
+/* Fond de la conversation : blanc en clair, noir pur en sombre */
+ion-content {
+  --background: var(--app-chat-bg);
+}
+
+/* Barre du bas : même fond que la conversation, séparée par un trait fin */
 ion-footer ion-toolbar {
   --background: var(--app-chat-footer-bg);
-  --min-height: 52px;
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 6px;
-  --padding-bottom: 6px;
+  --border-width: 0;
+  --min-height: 60px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --padding-top: 9px;
+  --padding-bottom: 9px;
+  border-top: 1px solid var(--app-chat-separator);
+}
+
+/* Pas d'ombre au-dessus du footer (Ionic en ajoute une en mode md) */
+ion-footer {
+  box-shadow: none;
+}
+
+/* ----------------------------------------------------------------
+   En-tête de conversation (slot "left" de AppHeader)
+   ---------------------------------------------------------------- */
+
+/* Ce contenu est écrit dans ChatView : ses styles scoped s'y appliquent */
+.entete {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.entete-avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--app-avatar-gemini);
+  color: var(--app-avatar-text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.entete-texte {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.entete-nom {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* "Assistant IA" en gris ; "écrit…" en bleu pendant que Gemini répond */
+.entete-statut {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--app-chat-placeholder);
+}
+.entete-statut.actif {
+  color: var(--app-bulle-user-bg);
+}
+
+/* Ionic (mode md) met les boutons en MAJUSCULES : on garde la casse normale */
+ion-button {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 600;
 }

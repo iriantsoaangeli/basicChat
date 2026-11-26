@@ -1,34 +1,129 @@
 /* ================================================================
-   STYLE DU COMPOSANT ChatBubble (une bulle de message)
+   STYLE DU COMPOSANT ChatBubble (un message : avatar + nom + bulle)
    Utilisé par : src/components/ChatBubble.vue
+   Couleurs : --app-bulle-* et --app-avatar-* dans le thème
    ================================================================ */
 
-/* Taille "téléphone" : texte 15px, bulles compactes et bien arrondies */
+
+/* ----------------------------------------------------------------
+   LEÇON 1 : La ligne (avatar à gauche, bulle à droite de l'avatar)
+   ---------------------------------------------------------------- */
+
+/* Toi à droite, les autres (Gemini, Admin) à gauche.               */
+/* min(80%, 460px) : jamais plus des 4/5 de l'écran, ni trop large  */
+/* sur un ordinateur.                                               */
+.ligne {
+  display: flex;
+  align-items: flex-end;        /* l'avatar s'aligne sur le BAS de la bulle */
+  gap: 8px;
+  max-width: min(80%, 460px);
+  margin-top: 2px;
+}
+.ligne.user                { align-self: flex-end; }
+.ligne.gemini, .ligne.autre { align-self: flex-start; }
+
+.contenu {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;                 /* laisse un long mot se couper au lieu d'élargir */
+}
+.ligne.user .contenu { align-items: flex-end; }
+
+
+/* ----------------------------------------------------------------
+   LEÇON 2 : La bulle et ses couleurs (une par participant)
+   ---------------------------------------------------------------- */
+
+/* Texte 15px = taille confortable sur téléphone */
 .bulle {
-  max-width: 75%;
-  padding: 7px 12px;
+  padding: 8px 12px 6px;
   border-radius: 18px;
   font-size: 15px;
   line-height: 1.35;
-  white-space: pre-wrap;      /* garde les retours à la ligne (Shift+Entrée) */
-  overflow-wrap: anywhere;    /* un long lien ne déborde pas de l'écran */
+  white-space: pre-wrap;        /* garde les retours à la ligne (Shift+Entrée) */
+  overflow-wrap: anywhere;      /* un long lien ne déborde pas de l'écran */
 }
 
-/* Utilisateur : à droite, bleu */
-.bulle.user {
-  align-self: flex-end;
+.user .bulle {
   background: var(--app-bulle-user-bg);
   color: var(--app-bulle-user-text);
-  border-bottom-right-radius: 4px;   /* petite "queue" côté expéditeur */
 }
-
-/* Gemini : à gauche, gris */
-.bulle.gemini {
-  align-self: flex-start;
+.gemini .bulle {
   background: var(--app-bulle-gemini-bg);
   color: var(--app-bulle-gemini-text);
-  border-bottom-left-radius: 4px;
 }
+.autre .bulle {
+  background: var(--app-bulle-autre-bg);
+  color: var(--app-bulle-autre-text);
+}
+
+
+/* ----------------------------------------------------------------
+   LEÇON 3 : Regrouper les messages d'un même participant
+   ---------------------------------------------------------------- */
+
+/* "A + B"      = un B placé juste après un A.                      */
+/* "A:has(+ B)" = un A qui est suivi d'un B.                        */
+/* Dans une série du même auteur, les coins qui se touchent         */
+/* deviennent petits : la série se lit comme un seul bloc.          */
+.ligne.user + .ligne.user .bulle            { border-top-right-radius: 4px; }
+.ligne.user:has(+ .ligne.user) .bulle       { border-bottom-right-radius: 4px; }
+.ligne.gemini + .ligne.gemini .bulle        { border-top-left-radius: 4px; }
+.ligne.gemini:has(+ .ligne.gemini) .bulle   { border-bottom-left-radius: 4px; }
+.ligne.autre + .ligne.autre .bulle          { border-top-left-radius: 4px; }
+.ligne.autre:has(+ .ligne.autre) .bulle     { border-bottom-left-radius: 4px; }
+
+/* Quand l'auteur change, on laisse plus d'air */
+.ligne.user + .ligne:not(.user),
+.ligne.gemini + .ligne:not(.gemini),
+.ligne.autre + .ligne:not(.autre) {
+  margin-top: 12px;
+}
+
+
+/* ----------------------------------------------------------------
+   LEÇON 4 : Avatar et nom (comme une conversation de groupe)
+   ---------------------------------------------------------------- */
+
+/* L'avatar prend toujours sa place (pour aligner les bulles),      */
+/* mais il n'est VISIBLE que sur le DERNIER message d'une série.    */
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-avatar-text);
+  visibility: hidden;
+}
+.gemini .avatar { background: var(--app-avatar-gemini); }
+.autre .avatar  { background: var(--app-avatar-autre); }
+
+/* "pas suivi d'un message du même auteur" = dernier de la série */
+.ligne.gemini:not(:has(+ .ligne.gemini)) .avatar,
+.ligne.autre:not(:has(+ .ligne.autre)) .avatar {
+  visibility: visible;
+}
+
+/* Le nom n'apparaît que sur le PREMIER message d'une série */
+.nom {
+  margin: 0 0 3px 12px;
+  font-size: 12px;
+  color: var(--app-chat-placeholder);
+}
+.ligne.gemini + .ligne.gemini .nom,
+.ligne.autre + .ligne.autre .nom {
+  display: none;
+}
+.autre .nom { color: var(--app-avatar-autre); font-weight: 600; }
+
+
+/* ----------------------------------------------------------------
+   LEÇON 5 : Le texte et l'heure
+   ---------------------------------------------------------------- */
 
 .bulle p {
   margin: 0;
@@ -40,5 +135,54 @@
   margin-top: 2px;
   text-align: right;
   font-size: 11px;
-  opacity: 0.6;
+  opacity: 0.65;
 }
+
+
+/* ----------------------------------------------------------------
+   LEÇON 6 : Les réponses de Gemini mises en forme (.md)
+   ---------------------------------------------------------------- */
+
+/* Ce HTML vient de v-html : Vue ne lui met PAS l'attribut "scoped". */
+/* :deep(...) permet quand même de le styler depuis ce fichier.      */
+
+/* Le HTML gère déjà les retours à la ligne (<p>, <br>, <li>) */
+.md {
+  white-space: normal;
+}
+
+.md :deep(p) { margin: 0 0 6px; }
+.md :deep(.titre) { font-weight: 600; margin-top: 4px; }
+.md :deep(strong) { font-weight: 600; }
+
+.md :deep(ul),
+.md :deep(ol) {
+  margin: 2px 0 6px;
+  padding-left: 20px;
+}
+.md :deep(li) { margin: 2px 0; }
+
+/* `code` dans une phrase : petite pastille */
+.md :deep(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--app-code-bg);
+}
+
+/* Bloc ```code``` : défile horizontalement au lieu de casser la bulle */
+.md :deep(pre) {
+  margin: 4px 0 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--app-code-bg);
+  overflow-x: auto;
+  white-space: pre;
+}
+.md :deep(pre code) { padding: 0; background: none; }
+
+.md :deep(a) { color: inherit; text-decoration: underline; }
+
+/* Pas de marge sous le dernier élément (sinon trou avant l'heure) */
+.md :deep(*:last-child) { margin-bottom: 0; }

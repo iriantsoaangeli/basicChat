@@ -54,12 +54,24 @@
    --app-accent-text: #ffffff;
 
    /* Chat style messagerie (ChatBubble, ChatBox, ChatInput, ChatView) */
-   --app-bulle-user-bg: #0084ff;
+   --app-chat-bg: #ffffff;
+   --app-bulle-user-bg: #0a7cff;
    --app-bulle-user-text: #ffffff;
-   --app-bulle-gemini-bg: #e4e6eb;
-   --app-bulle-gemini-text: #050505;
-   --app-chat-input-bg: #f0f2f5;
+   --app-bulle-gemini-bg: #e9e9eb;
+   --app-bulle-gemini-text: #0a0a0a;
+   --app-chat-input-bg: #f0f0f2;
+   --app-chat-input-text: #0a0a0a;
+   --app-chat-placeholder: #8a8a8e;
    --app-chat-footer-bg: #ffffff;
+   --app-chat-separator: #e5e5ea;
+   --app-code-bg: rgba(0, 0, 0, 0.07);
+
+   /* Participants : Gemini (indigo) et tout autre auteur (ambre) */
+   --app-avatar-gemini: #5b5bd6;
+   --app-avatar-autre: #b86e00;
+   --app-avatar-text: #ffffff;
+   --app-bulle-autre-bg: #fff0d4;
+   --app-bulle-autre-text: #4a3200;
 }
 
 
@@ -87,11 +99,18 @@
       --app-accent-start: #3a5fb0;
       --app-accent-end: #5e3aa8;
 
-      /* Chat : la bulle user reste bleue, le reste passe en gris foncé */
-      --app-bulle-gemini-bg: #303030;
-      --app-bulle-gemini-text: #e4e6eb;
-      --app-chat-input-bg: #3a3b3c;
-      --app-chat-footer-bg: #1f1f1f;
+      /* Chat : fond noir pur comme les messageries natives, bulle user reste bleue */
+      --app-chat-bg: #000000;
+      --app-bulle-gemini-bg: #26262a;
+      --app-bulle-gemini-text: #f2f2f7;
+      --app-chat-input-bg: #1c1c1f;
+      --app-chat-input-text: #f2f2f7;
+      --app-chat-placeholder: #8a8a8e;
+      --app-chat-footer-bg: #000000;
+      --app-chat-separator: #26262a;
+      --app-code-bg: rgba(255, 255, 255, 0.1);
+      --app-bulle-autre-bg: #3a2a0c;
+      --app-bulle-autre-text: #ffdf9e;
    }
 }
 
