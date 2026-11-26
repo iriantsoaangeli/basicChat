@@ -6,7 +6,9 @@
 
 - [ ] component selection d'image 
 - [ ] Component image dans chat 
-- [ ] Component image dans chat Full screen 
+- [ ] Component image dans chat Full screen (reutiliser image de  sprint-1)
+  - [ ] Bouton download 
+  - [ ] Bouton navigation
 
 # Back 
 - [ ] Service API 
