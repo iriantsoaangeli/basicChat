@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Fonctions utilitaires ----------
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // ---------- notes/{noteId} ----------
+    // Une note valide : seulement ces champs, avec ces types et ces tailles
+    function validNote(d) {
+      return d.keys().hasAll(['owner', 'title', 'text', 'createdAt', 'updatedAt'])
+          && d.keys().hasOnly(['owner', 'title', 'text', 'thumb', 'photoId', 'createdAt', 'updatedAt'])
+          && d.title is string && d.title.size() > 0 && d.title.size() <= 100
+          && d.text is string && d.text.size() <= 5000
+          && (!('thumb' in d) || (d.thumb is string && d.thumb.size() <= 30000))
+          && (!('photoId' in d) || d.photoId is string);
+    }
+
+    match /notes/{noteId} {
+      // Lire : seulement ses propres notes
+      allow read: if isOwner(resource.data.owner);
+
+      // Créer : en son nom, données valides, dates = heure du serveur
+      allow create: if isOwner(request.resource.data.owner)
+                    && validNote(request.resource.data)
+                    && request.resource.data.createdAt == request.time
+                    && request.resource.data.updatedAt == request.time;
+
+      // Modifier : ses notes, seulement titre/texte/photo, owner et createdAt figés
+      allow update: if isOwner(resource.data.owner)
+                    && validNote(request.resource.data)
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['title', 'text', 'thumb', 'photoId', 'updatedAt'])
+                    && request.resource.data.updatedAt == request.time;
+
+      // Supprimer : ses notes
+      allow delete: if isOwner(resource.data.owner);
+    }
+
+    // ---------- photos/{photoId} : grande photo en base64 ----------
+    match /photos/{photoId} {
+      allow read:   if isOwner(resource.data.owner);
+      allow create: if isOwner(request.resource.data.owner)
+                    && request.resource.data.keys().hasOnly(['owner', 'b64', 'createdAt'])
+                    && request.resource.data.b64 is string
+                    && request.resource.data.b64.size() <= 700000
+                    && request.resource.data.createdAt == request.time;
+      allow delete: if isOwner(resource.data.owner);
+      // pas de update : une photo ne se modifie pas, on en crée une nouvelle
+    }
+
+    // Tout le reste : interdit (rien n'est autorisé par défaut)
+  }
+}
