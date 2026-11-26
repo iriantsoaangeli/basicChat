@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
     name: 'template-galerie',
     component: () => import('../views/template/GalerieView.vue'),
   },
+  {
+    path: '/chat',
+    name: 'chat',
+    component: () => import('../views/ChatView.vue'),
+  },
 ]
 
 const router = createRouter({
