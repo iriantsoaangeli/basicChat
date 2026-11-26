@@ -1,6 +1,6 @@
 /* ================================================================
-   STYLE DE LA PAGE GALERIE (route /template/galerie)
-   Utilisé par : src/views/template/GalerieView.vue
+   STYLE DU COMPOSANT ListPhoto (recherche + tri + grille)
+   Utilisé par : src/components/photo/ListPhoto.vue
    ================================================================ */
 
 
@@ -8,7 +8,9 @@
    LEÇON 1 : La grille qui s'adapte à l'écran
    ---------------------------------------------------------------- */
 
-/* Les cartes elles-mêmes sont stylées dans                       */
+/* La recherche et le tri n'ont besoin d'aucun CSS : ce sont des  */
+/* composants Ionic (ion-searchbar, ion-segment, ion-toolbar).     */
+/* Les cartes elles-mêmes sont stylées dans                        */
 /* composant-photo-card.css ; ici, seulement leur disposition.     */
 /* display: grid range les cartes en colonnes.                     */
 /* repeat(auto-fill, minmax(200px, 1fr)) se lit ainsi :           */
@@ -16,7 +18,7 @@
 /*    200px, et partage l'espace restant (1fr) entre elles".       */
 /* Résultat : 1 colonne sur téléphone, plusieurs sur ordinateur,   */
 /* sans aucune media query.                                        */
-.galerie-grid {
+.liste-grille {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 8px;

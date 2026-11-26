@@ -103,7 +103,7 @@
 /*   theme-couleurs-clair-sombre.css   ce fichier (les couleurs)   */
 /*   composant-barres-header-footer.css  AppHeader + AppFooter     */
 /*   composant-photo-card.css          style de PhotoCard          */
-/*   page-galerie.css                  style de GalerieView        */
+/*   composant-list-photo.css          style de ListPhoto          */
 
 /* AppHeader     src/components/AppHeader.vue                      */
 /* AppFooter     src/components/AppFooter.vue                      */
@@ -112,10 +112,13 @@
 /*   --app-header-text     texte gauche et droite                  */
 
 /* GalerieView   src/views/template/GalerieView.vue                */
-/*   style dans    src/styles/page-galerie.css                     */
+/*   aucun style propre : tout vient de ses composants             */
+
+/* ListPhoto     src/components/photo/ListPhoto.vue                */
+/*   style dans    src/styles/composant-list-photo.css             */
 /*   (grille uniquement, aucune variable de couleur)               */
 
-/* PhotoCard     src/components/PhotoCard.vue                      */
+/* PhotoCard     src/components/photo/PhotoCard.vue                */
 /*   style dans    src/styles/composant-photo-card.css             */
 /*   --app-card-bg         fond de la carte                        */
 /*   --app-accent-start    début du dégradé (carte sans image)     */
