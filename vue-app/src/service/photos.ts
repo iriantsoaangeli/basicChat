@@ -4,9 +4,7 @@
 // par l'utilisateur est fait dans usePhotos, sur les photos chargées.
 // Les composants n'appellent QUE ces fonctions (via usePhotos), jamais Firestore directement.
 import {
-  addDoc,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -16,14 +14,16 @@ import {
   serverTimestamp,
   startAfter,
   where,
+  writeBatch,
   type FirestoreDataConverter,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore'
 import { db, ensureUser } from '@/firebase'
 import { estRefuse } from '@/service/errors'
-import { creerMiniature, enregistrerImage, supprimerImage } from '@/service/images'
+import { compresserGrandeImage, creerMiniature, refImage } from '@/service/images'
 import {
   PHOTOS_PAR_LOT,
+  type ImageCreate,
   type NouvellePhoto,
   type Photo,
   type PhotoCreate,
@@ -56,9 +56,15 @@ const photosWrite = collection(db, 'photos')
 // Curseur de pagination : la dernière photo du lot précédent
 export type Curseur = QueryDocumentSnapshot<Photo, PhotoDb>
 
-/** CRÉER une photo. L'image est compressée puis rangée en 2 tailles. Renvoie l'id. */
+/**
+ * CRÉER une photo. L'image est compressée en 2 tailles, puis la photo et la grande image
+ * sont écrites dans UN batch : Firestore enregistre les deux, ou aucune (pas d'image orpheline).
+ * Renvoie l'id de la photo.
+ */
 export async function creerPhoto(nouvelle: NouvellePhoto): Promise<string> {
   const user = await ensureUser()
+  const batch = writeBatch(db)
+  const photoRef = doc(photosWrite) // id généré tout de suite, rien n'est encore écrit
   const data: PhotoCreate = {
     owner: user.uid,
     nom: nouvelle.nom,
@@ -68,11 +74,19 @@ export async function creerPhoto(nouvelle: NouvellePhoto): Promise<string> {
   // Firestore refuse les champs undefined : on n'ajoute que ce qui est rempli
   if (nouvelle.description) data.description = nouvelle.description
   if (nouvelle.fichier) {
+    // Toute la compression d'abord : si elle échoue, rien n'a été écrit
     data.thumb = await creerMiniature(nouvelle.fichier) // petite image, pour la galerie
-    data.imageId = await enregistrerImage(nouvelle.fichier) // grande image, pour PhotoGrand
+    const imageRef = refImage() // grande image, pour PhotoGrand
+    batch.set(imageRef, {
+      owner: user.uid,
+      b64: await compresserGrandeImage(nouvelle.fichier),
+      createdAt: serverTimestamp(),
+    } satisfies ImageCreate)
+    data.imageId = imageRef.id
   }
-  const ref = await addDoc(photosWrite, data)
-  return ref.id
+  batch.set(photoRef, data)
+  await batch.commit()
+  return photoRef.id
 }
 
 /**
@@ -110,12 +124,10 @@ export async function lirePhoto(id: string): Promise<Photo | null> {
   }
 }
 
-/**
- * SUPPRIMER une photo et sa grande image.
- * La photo d'abord : si la suite échoue, il reste au pire une image orpheline
- * (invisible, juste de la place perdue), jamais une photo qui pointe vers une image absente.
- */
+/** SUPPRIMER une photo et sa grande image, dans un batch : les deux disparaissent, ou aucune */
 export async function supprimerPhoto(photo: Photo): Promise<void> {
-  await deleteDoc(doc(photosWrite, photo.id))
-  if (photo.imageId) await supprimerImage(photo.imageId)
+  const batch = writeBatch(db)
+  batch.delete(doc(photosWrite, photo.id))
+  if (photo.imageId) batch.delete(refImage(photo.imageId))
+  await batch.commit()
 }

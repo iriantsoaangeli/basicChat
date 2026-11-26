@@ -1,19 +1,12 @@
 // src/service/images.ts
 // RÔLE : transformer une image choisie en base64 assez petit pour Firestore,
-// l'enregistrer dans images/{id}, la relire (cache du téléphone d'abord) et la supprimer.
+// donner les références images/{id} et relire une image (cache du téléphone d'abord).
+// L'écriture et la suppression se font dans service/photos.ts, en batch avec la photo.
 // Repris de doc/2-vue-firestore/exemple-complet/src/services/photos.ts
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocFromCache,
-  serverTimestamp,
-} from 'firebase/firestore'
-import { db, ensureUser } from '@/firebase'
+import { collection, doc, getDoc, getDocFromCache } from 'firebase/firestore'
+import { db } from '@/firebase'
 import { estRefuse } from '@/service/errors'
-import { IMAGE_MAX_CHARS, THUMB_MAX_CHARS, type ImageCreate } from '@/type/photo'
+import { IMAGE_MAX_CHARS, THUMB_MAX_CHARS } from '@/type/photo'
 
 const imagesCol = collection(db, 'images')
 
@@ -56,16 +49,14 @@ export function creerMiniature(file: File): Promise<string> {
   return imageToBase64(file, 240, THUMB_MAX_CHARS)
 }
 
-/** Grande image 1280 px → nouveau document images/{id}. Renvoie l'id. */
-export async function enregistrerImage(file: File): Promise<string> {
-  const user = await ensureUser()
-  const b64 = await imageToBase64(file, 1280, IMAGE_MAX_CHARS)
-  const ref = await addDoc(imagesCol, {
-    owner: user.uid,
-    b64,
-    createdAt: serverTimestamp(),
-  } satisfies ImageCreate)
-  return ref.id
+/** Grande image 1280 px, en base64 : rien n'est écrit, c'est creerPhoto qui l'enregistre */
+export function compresserGrandeImage(file: File): Promise<string> {
+  return imageToBase64(file, 1280, IMAGE_MAX_CHARS)
+}
+
+/** Référence images/{id} ; sans id, Firestore en génère un nouveau (sans rien écrire) */
+export function refImage(id?: string) {
+  return id ? doc(imagesCol, id) : doc(imagesCol)
 }
 
 /**
@@ -87,10 +78,6 @@ export async function lireImage(imageId: string): Promise<string | null> {
     if (estRefuse(e)) return null
     throw e
   }
-}
-
-export function supprimerImage(imageId: string): Promise<void> {
-  return deleteDoc(doc(imagesCol, imageId))
 }
 
 /** Pour <img :src="toSrc(b64)"> */
