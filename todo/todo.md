@@ -1,0 +1,46 @@
+- [ ] Front 
+  - [ ] Page galerie
+    - [ ] Disposition 
+    - [ ] Component pour image 
+    - [ ] Component table 
+      - [ ] Filtre : date , nom de fichier 
+  - [ ] Page de chat
+    - [ ] Component pour bulle de texte 
+    - [ ] Bulle 
+  - [ ] Formulaire d'upload 
+    - [ ] Ajouter photo (3 max )
+    - [ ] upload
+  - [ ] Commun
+    - [ ] footer 
+      - [ ] etu du binome 
+      - [ ] lien git 
+    - [ ] Component Header 
+      - [ ] Logo/titre 
+      - [ ] Bouton Upload 
+    - [ ] Component Toast 
+      - [ ] Erreur 
+      - [ ] Confirmation 
+- [ ]  Back
+  - [ ]  typage
+    - [ ]  messages
+    - [ ]  Images
+    - [ ]  API Gemnini 
+  - [ ] firebase 
+    - [ ]  Interface generalisee
+      - [ ]  verion Db 
+      - [ ]  Create 
+      - [ ]  update
+      - [ ]  fromFirestore 
+      - [ ]  ToFirestore 
+    - [ ]  Implementer pour chaque type 
+      - [ ]  image 
+      - [ ]  message 
+    - [ ] Fonctionnalite
+      - [ ] Prendre les anciens messages 
+      - [ ] Prendre les photo 
+      - [ ] Upload image 
+        - [ ] Verifier taille
+      - [ ] API gemini 
+        - [ ] Donner l'image a gemini     
+        - [ ]  Verifier quota 
+      - [ ] Verifier connexion internet   
