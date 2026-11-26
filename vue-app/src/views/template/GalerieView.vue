@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   IonButton,
   IonButtons,
@@ -18,9 +18,9 @@ import ListPhoto from '@/components/photo/ListPhoto.vue'
 import PhotoForm from '@/components/photo/PhotoForm.vue'
 import { useConnexion } from '@/composables/useConnexion'
 import { usePhotos } from '@/composables/usePhotos'
-import type { ChampTri, NouvellePhoto, Tri } from '@/type/photo'
+import type { ChampTri, NouvellePhoto } from '@/type/photo'
 
-const { photos, chargement, erreur, encore, charger, chargerPlus, trierPar, ajouter } = usePhotos()
+const { photos, chargement, erreur, encore, tri, charger, chargerPlus, ajouter } = usePhotos()
 const { enLigne } = useConnexion()
 
 // Champs proposés pour le tri, dans l'ordre d'affichage
@@ -32,10 +32,6 @@ const champs: ChampTri[] = [
 
 // Premier lot de 8 à l'ouverture de la galerie
 onMounted(charger)
-
-// Les plus récentes d'abord ; changer de tri retrie les photos déjà chargées, sans recharger
-const tri = ref<Tri>({ champ: 'createdAt', croissant: false })
-watch(tri, trierPar)
 
 async function lotSuivant(fini: () => void) {
   await chargerPlus()

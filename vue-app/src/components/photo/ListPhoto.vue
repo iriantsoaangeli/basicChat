@@ -35,7 +35,7 @@ const props = withDefaults(
   { champs: () => [], encore: false, chargement: false, erreur: null },
 )
 
-// v-model:tri : le tri choisi ; le parent l'applique (usePhotos trie les photos chargées)
+// v-model:tri : le tri choisi (usePhotos retrie les photos chargées quand il change)
 const tri = defineModel<Tri>('tri', { required: true })
 
 // plus : le parent charge le lot suivant, puis appelle fini()

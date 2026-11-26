@@ -8,7 +8,7 @@
 //   - changer de tri retrie les photos déjà chargées (pas de rechargement)
 // Donc tant que tout n'est pas chargé, le tri vaut pour ce qui est affiché,
 // et une photo d'un nouveau lot peut se placer avant celles déjà affichées.
-import { readonly, ref, shallowRef } from 'vue'
+import { readonly, ref, shallowRef, watch } from 'vue'
 import { Timestamp } from 'firebase/firestore'
 import { errorMessage } from '@/service/errors'
 import { creerPhoto, lirePhoto, listerMesPhotos, supprimerPhoto, type Curseur } from '@/service/photos'
@@ -19,7 +19,8 @@ const chargement = ref(false)
 const erreur = ref<string | null>(null)
 const encore = ref(false) // reste-t-il un lot à charger ?
 
-let tri: Tri = { champ: 'createdAt', croissant: false }
+// Le tri choisi : UNE seule source, branchée directement sur la barre de tri (v-model:tri)
+const tri = ref<Tri>({ champ: 'createdAt', croissant: false })
 let curseur: Curseur | undefined
 let demande = 0 // numéro de la dernière demande : une réponse plus ancienne est ignorée
 
@@ -31,9 +32,13 @@ function comparer(a: Photo[Tri['champ']], b: Photo[Tri['champ']]): number {
 
 // Renvoie une copie triée (ne modifie jamais le tableau reçu)
 function trier(liste: readonly Photo[]): Photo[] {
-  const sens = tri.croissant ? 1 : -1
-  return [...liste].sort((a, b) => sens * comparer(a[tri.champ], b[tri.champ]))
+  const { champ, croissant } = tri.value
+  const sens = croissant ? 1 : -1
+  return [...liste].sort((a, b) => sens * comparer(a[champ], b[champ]))
 }
+
+// Changer de tri : retrie les photos déjà chargées, sans rien relire dans Firestore
+watch(tri, () => (photos.value = trier(photos.value)))
 
 // Charge un lot ; `suite` = l'ajouter à la liste au lieu de la remplacer
 async function chargerLot(suite: boolean) {
@@ -65,12 +70,6 @@ function charger() {
 function chargerPlus() {
   if (!encore.value || chargement.value) return Promise.resolve()
   return chargerLot(true)
-}
-
-/** Change le tri : retrie les photos déjà chargées, sans rien relire dans Firestore */
-function trierPar(nouveau: Tri) {
-  tri = nouveau
-  photos.value = trier(photos.value)
 }
 
 /**
@@ -112,9 +111,9 @@ export function usePhotos() {
     chargement: readonly(chargement),
     erreur: readonly(erreur),
     encore: readonly(encore),
+    tri, // modifiable : c'est la sélection affichée dans la barre de tri
     charger,
     chargerPlus,
-    trierPar,
     ajouter,
     supprimer,
     trouver,
