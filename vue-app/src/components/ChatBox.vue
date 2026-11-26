@@ -17,8 +17,12 @@ defineProps<{
       :auteur="m.auteur"
       :date="m.createdAt.toDate()"
     />
-    <p v-if="enAttente" class="ecrit">Gemini écrit…</p>
-    <p v-if="!messages.length && !enAttente" class="vide">Pose ta première question à Gemini 👋</p>
+    <div v-if="enAttente" class="ecrit" role="status" aria-label="Gemini écrit">
+      <span></span><span></span><span></span>
+    </div>
+    <p v-if="!messages.length && !enAttente" class="vide">
+      Aucun message pour l'instant. Écris ta question en bas pour démarrer la conversation avec Gemini.
+    </p>
   </div>
 </template>
 

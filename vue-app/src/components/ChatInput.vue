@@ -28,6 +28,7 @@ Entrée ajouterait d'abord un \n au texte. -->
     :disabled="disabled"
     placeholder="Écris un message…"
     :auto-grow="true"
+    :rows="1"
     @keydown.enter.exact.prevent="envoyer"
   />
 </template>
