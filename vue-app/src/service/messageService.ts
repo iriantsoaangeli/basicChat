@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, limit, orderBy, query, serverTimestamp, Timestamp, where, } from "firebase/firestore"
+import { addDoc, collection, getDocs, limit, orderBy, query, serverTimestamp, startAfter, Timestamp, where, } from "firebase/firestore"
 import { db, ensureUser } from "@/firebase"
 import { askGemini, GeminiError } from "./gemini"
 import { messageConverter } from "@/type/message"
@@ -10,10 +10,13 @@ const messageCol = collection(db, 'messages')
 // pour lire
 const messageLus = messageCol.withConverter(messageConverter)
 
-export async function fetchMessage(max=50): Promise<Message[]> {
+// avant = date du plus vieux message déjà affiché (curseur) ; absent = les plus récents
+export async function fetchMessage(max=50, avant?: Timestamp): Promise<Message[]> {
     const  user = await ensureUser()
-    // recent
-    const q = query(messageLus, where('owner', '==', user.uid), orderBy('createdAt', 'desc'), limit(max))
+    // recent ; avec startAfter : la page juste avant le curseur
+    const q = avant
+        ? query(messageLus, where('owner', '==', user.uid), orderBy('createdAt', 'desc'), startAfter(avant), limit(max))
+        : query(messageLus, where('owner', '==', user.uid), orderBy('createdAt', 'desc'), limit(max))
     const snap = await getDocs(q)
     // les plus anciens en premier
     return snap.docs.map((d) => d.data()).reverse()
@@ -29,12 +32,18 @@ export async function registerMessage(texte: string, auteur: Auteur): Promise<Me
     return {id: ref.id,owner: user.uid, texte, auteur, createdAt: ici, updatedAt: ici}
 }
 
-export async function sendMessage(texte: string, history: Message[]): Promise<Message[]> {
+// Étape 1 : enregistrer la question. La page l'affiche dès que c'est fait,
+// SANS attendre Gemini.
+export async function sendQuestion(texte: string): Promise<Message> {
     if (!navigator.onLine)
         throw new GeminiError('Pas de connexion internet')
 
-    const question = await registerMessage(texte, 'user')
+    return registerMessage(texte, 'user')
+}
+
+// Étape 2 : demander la réponse à Gemini, puis l'enregistrer.
+// history = les messages AVANT la question (la question part à part, dans texte)
+export async function answerMessage(texte: string, history: Message[]): Promise<Message> {
     const rep = await askGemini(history.slice(-20), texte)
-    const message = await registerMessage(rep, 'gemini')
-    return [question, message]
+    return registerMessage(rep, 'gemini')
 }
