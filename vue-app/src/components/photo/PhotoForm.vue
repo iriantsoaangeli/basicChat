@@ -3,53 +3,62 @@ import { computed, onBeforeUnmount, ref } from 'vue'
 import { IonButton, IonIcon, IonInput, IonList, IonTextarea, IonItem } from '@ionic/vue'
 import { imageOutline } from 'ionicons/icons'
 import PhotoCard from '@/components/photo/PhotoCard.vue'
-import type { NouvellePhoto } from '@/type/photo'
+import { DESCRIPTION_MAX, NOM_MAX, type NouvellePhoto } from '@/type/photo'
 
 // Formulaire d'ajout d'une photo : nom (obligatoire), description, image
 // valider → renvoie les données remplies ; le parent décide quoi en faire
+// desactive : bloque l'envoi (ex. pas d'internet, envoi déjà en cours)
+defineProps<{ desactive?: boolean }>()
 const emit = defineEmits<{ valider: [photo: NouvellePhoto] }>()
 
 const nom = ref('')
 const description = ref('')
-const image = ref('') // URL locale de l'image choisie (aperçu)
+const fichier = ref<File>()
+const apercu = ref('') // URL locale (blob:...) du fichier, seulement pour l'aperçu
 const champFichier = ref<HTMLInputElement>()
 
 const valide = computed(() => nom.value.trim() !== '')
 
-// Le fichier choisi est montré via une URL locale (blob:...),
-// valable tant que la page est ouverte : pas encore d'envoi vers un serveur
 function choisirImage(event: Event) {
-  const fichier = (event.target as HTMLInputElement).files?.[0]
-  if (!fichier) return
-  if (image.value) URL.revokeObjectURL(image.value) // libère l'image précédente
-  image.value = URL.createObjectURL(fichier)
+  const choisi = (event.target as HTMLInputElement).files?.[0]
+  if (!choisi) return
+  if (apercu.value) URL.revokeObjectURL(apercu.value) // libère l'aperçu précédent
+  fichier.value = choisi
+  apercu.value = URL.createObjectURL(choisi)
 }
 
-let envoye = false
+// Le fichier lui-même est envoyé : la compression en base64 se fait à l'enregistrement
 function valider() {
   if (!valide.value) return
-  envoye = true
   emit('valider', {
     nom: nom.value.trim(),
     description: description.value.trim() || undefined,
-    image: image.value || undefined,
+    fichier: fichier.value,
   })
 }
 
-// Formulaire fermé sans valider : l'image choisie ne sert plus, on la libère
+// L'aperçu ne sert plus une fois le formulaire fermé
 onBeforeUnmount(() => {
-  if (!envoye && image.value) URL.revokeObjectURL(image.value)
+  if (apercu.value) URL.revokeObjectURL(apercu.value)
 })
 </script>
 
 <template>
   <form @submit.prevent="valider">
     <!-- Aperçu : la carte telle qu'elle apparaîtra dans la galerie -->
-    <PhotoCard :nom="nom || 'Nom de la photo'" :description="description" :image="image" />
+    <PhotoCard :nom="nom || 'Nom de la photo'" :description="description" :image="apercu" />
 
+    <!-- maxlength : mêmes limites que firestore.rules, bloquées avant l'envoi -->
     <ion-list>
       <ion-item>
-        <ion-input v-model="nom" label="Nom" label-placement="stacked" placeholder="Ex. Tsingy" required />
+        <ion-input
+          v-model="nom"
+          label="Nom"
+          label-placement="stacked"
+          placeholder="Ex. Tsingy"
+          :maxlength="NOM_MAX"
+          required
+        />
       </ion-item>
       <ion-item>
         <ion-textarea
@@ -57,6 +66,7 @@ onBeforeUnmount(() => {
           label="Description"
           label-placement="stacked"
           placeholder="Facultative"
+          :maxlength="DESCRIPTION_MAX"
           auto-grow
         />
       </ion-item>
@@ -68,9 +78,9 @@ onBeforeUnmount(() => {
     <div class="ion-padding">
       <ion-button expand="block" fill="outline" @click="champFichier?.click()">
         <ion-icon slot="start" :icon="imageOutline" />
-        {{ image ? "Changer l'image" : 'Choisir une image' }}
+        {{ fichier ? "Changer l'image" : 'Choisir une image' }}
       </ion-button>
-      <ion-button expand="block" type="submit" :disabled="!valide">Enregistrer</ion-button>
+      <ion-button expand="block" type="submit" :disabled="!valide || desactive">Enregistrer</ion-button>
     </div>
   </form>
 </template>
