@@ -6,7 +6,7 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 1 : Pourquoi ce fichier est "scoped"
+   1. Pourquoi ce fichier est "scoped"
    ---------------------------------------------------------------- */
 
 /* AppHeader.vue et AppFooter.vue chargent ce fichier avec        */
@@ -18,7 +18,7 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 2 : Les couleurs de la barre
+   2. Les couleurs de la barre
    ---------------------------------------------------------------- */
 
 /* Les composants Ionic ne se colorent pas avec background/color,  */
@@ -32,7 +32,7 @@ ion-toolbar {
 
 
 /* ----------------------------------------------------------------
-   LEÇON 3 : Le texte gauche et droite
+   3. Le texte gauche et droite
    ---------------------------------------------------------------- */
 
 /* .header-text est la classe des zones gauche et droite          */
