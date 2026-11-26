@@ -112,6 +112,10 @@
 /*   --app-header-bg       fond des deux barres                    */
 /*   --app-header-text     texte gauche et droite                  */
 
+/* BadgeConnexion src/components/BadgeConnexion.vue                */
+/*   affiché dans  AppHeader                                       */
+/*   visible hors ligne seulement ; ion-badge couleur danger       */
+
 /* GalerieView   src/views/template/GalerieView.vue                */
 /*   aucun style propre : tout vient de ses composants             */
 
