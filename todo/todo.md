@@ -1,4 +1,4 @@
-- [ ] Front 
+## Front
   - [ ] Page galerie
     - [ ] Disposition 
     - [ ] Component pour image 
@@ -20,7 +20,7 @@
     - [ ] Component Toast 
       - [ ] Erreur 
       - [ ] Confirmation 
-- [ ]  Back
+## Back
   - [ ]  typage
     - [ ]  messages
     - [ ]  Images
