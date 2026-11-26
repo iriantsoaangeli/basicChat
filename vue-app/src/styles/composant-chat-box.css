@@ -1,0 +1,33 @@
+/* ================================================================
+   STYLE DU COMPOSANT ChatBox (la liste des bulles)
+   Utilisé par : src/components/ChatBox.vue
+   ================================================================ */
+
+.chat-box {
+  display: flex;
+  flex-direction: column;    /* les bulles s'empilent, et align-self choisit leur côté */
+  gap: 4px;                  /* bulles serrées, comme une messagerie */
+  padding: 10px 10px 6px;
+  max-width: 600px;          /* sur un écran d'ordi, on garde une colonne "téléphone" */
+  margin: 0 auto;
+}
+
+/* "Gemini écrit…" : petite bulle grise à gauche, comme la réponse à venir */
+.ecrit {
+  align-self: flex-start;
+  margin: 4px 0 0;
+  padding: 7px 12px;
+  border-radius: 18px;
+  background: var(--app-bulle-gemini-bg);
+  color: var(--app-bulle-gemini-text);
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Conversation vide : texte centré et discret */
+.vide {
+  align-self: center;
+  margin-top: 40%;
+  font-size: 14px;
+  opacity: 0.6;
+}

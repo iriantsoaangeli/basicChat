@@ -34,24 +34,32 @@
 /* :root = la racine de la page. Ces valeurs s'appliquent partout  */
 /* tant qu'aucun mode sombre n'est actif.                          */
 :root {
-  /* Couleur principale (boutons, liens, accents) */
-  --ion-color-primary: #5b8def;
+   /* Couleur principale (boutons, liens, accents) */
+   --ion-color-primary: #5b8def;
 
-  /* Fond et texte généraux de la page */
-  --ion-background-color: #f4f5f8;
-  --ion-text-color: #1e1e1e;
+   /* Fond et texte généraux de la page */
+   --ion-background-color: #f4f5f8;
+   --ion-text-color: #1e1e1e;
 
-  /* Header (utilisé par AppHeader) */
-  --app-header-bg: #ffffff;
-  --app-header-text: #1e1e1e;
+   /* Header (utilisé par AppHeader) */
+   --app-header-bg: #ffffff;
+   --app-header-text: #1e1e1e;
 
-  /* Cartes (utilisé par GalerieView) */
-  --app-card-bg: #ffffff;
+   /* Cartes (utilisé par GalerieView) */
+   --app-card-bg: #ffffff;
 
-  /* Zone image des cartes : dégradé de --app-accent-start vers --app-accent-end */
-  --app-accent-start: #5b8def;
-  --app-accent-end: #8e5bef;
-  --app-accent-text: #ffffff;
+   /* Zone image des cartes : dégradé de --app-accent-start vers --app-accent-end */
+   --app-accent-start: #5b8def;
+   --app-accent-end: #8e5bef;
+   --app-accent-text: #ffffff;
+
+   /* Chat style messagerie (ChatBubble, ChatBox, ChatInput, ChatView) */
+   --app-bulle-user-bg: #0084ff;
+   --app-bulle-user-text: #ffffff;
+   --app-bulle-gemini-bg: #e4e6eb;
+   --app-bulle-gemini-text: #050505;
+   --app-chat-input-bg: #f0f2f5;
+   --app-chat-footer-bg: #ffffff;
 }
 
 
@@ -64,21 +72,27 @@
 /* On ne redéclare QUE les variables qui changent ; les autres     */
 /* gardent leur valeur du mode clair.                              */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --ion-color-primary: #4d8dff;
+   :root {
+      --ion-color-primary: #4d8dff;
 
-    --ion-background-color: #121212;
-    --ion-text-color: #f1f1f1;
+      --ion-background-color: #121212;
+      --ion-text-color: #f1f1f1;
 
-    --app-header-bg: #1f1f1f;
-    --app-header-text: #f1f1f1;
+      --app-header-bg: #1f1f1f;
+      --app-header-text: #f1f1f1;
 
-    --app-card-bg: #1e1e1e;
+      --app-card-bg: #1e1e1e;
 
-    /* Dégradé un peu plus sombre pour ne pas éblouir */
-    --app-accent-start: #3a5fb0;
-    --app-accent-end: #5e3aa8;
-  }
+      /* Dégradé un peu plus sombre pour ne pas éblouir */
+      --app-accent-start: #3a5fb0;
+      --app-accent-end: #5e3aa8;
+
+      /* Chat : la bulle user reste bleue, le reste passe en gris foncé */
+      --app-bulle-gemini-bg: #303030;
+      --app-bulle-gemini-text: #e4e6eb;
+      --app-chat-input-bg: #3a3b3c;
+      --app-chat-footer-bg: #1f1f1f;
+   }
 }
 
 

@@ -1,0 +1,14 @@
+/* ================================================================
+   STYLE DE LA PAGE ChatView
+   Utilisé par : src/views/ChatView.vue
+   ================================================================ */
+
+/* Barre du bas : fine, avec un peu de marge autour du champ */
+ion-footer ion-toolbar {
+  --background: var(--app-chat-footer-bg);
+  --min-height: 52px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+}

@@ -1,0 +1,19 @@
+/* ================================================================
+   STYLE DU COMPOSANT ChatInput (le champ de saisie)
+   Utilisé par : src/components/ChatInput.vue
+   ================================================================ */
+
+/* Champ en forme de "pilule" grise, comme dans une messagerie.        */
+/* ion-textarea se règle avec ses propres variables (--padding-...).  */
+ion-textarea {
+  background: var(--app-chat-input-bg);
+  border-radius: 20px;
+  font-size: 15px;
+  min-height: 36px;
+  max-height: 120px;                    /* au-delà de ~5 lignes, ça défile */
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --highlight-color-focused: transparent; /* pas de soulignement bleu au focus */
+}
