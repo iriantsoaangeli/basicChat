@@ -9,6 +9,9 @@ export interface Photo extends DbDocument {
   image?: string // URL de l'image
 }
 
+// Ce que l'utilisateur remplit dans PhotoForm (id et dates sont ajoutés à l'enregistrement)
+export type NouvellePhoto = Pick<Photo, 'nom' | 'description' | 'image'>
+
 // Un champ sur lequel ListPhoto peut trier, avec le texte affiché sur le bouton
 export interface ChampTri {
   cle: keyof Photo
