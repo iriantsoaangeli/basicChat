@@ -20,7 +20,7 @@ import {
 } from 'firebase/firestore'
 import { db, ensureUser } from '@/firebase'
 import { estRefuse } from '@/service/errors'
-import { compresserGrandeImage, creerMiniature, refImage } from '@/service/images'
+import { compresserImage, refImage } from '@/service/images'
 import {
   PHOTOS_PAR_LOT,
   type ImageCreate,
@@ -75,13 +75,10 @@ export async function creerPhoto(nouvelle: NouvellePhoto): Promise<string> {
   if (nouvelle.description) data.description = nouvelle.description
   if (nouvelle.fichier) {
     // Toute la compression d'abord : si elle échoue, rien n'a été écrit
-    data.thumb = await creerMiniature(nouvelle.fichier) // petite image, pour la galerie
+    const { thumb, b64 } = await compresserImage(nouvelle.fichier)
+    data.thumb = thumb // petite image, pour la galerie
     const imageRef = refImage() // grande image, pour PhotoGrand
-    batch.set(imageRef, {
-      owner: user.uid,
-      b64: await compresserGrandeImage(nouvelle.fichier),
-      createdAt: serverTimestamp(),
-    } satisfies ImageCreate)
+    batch.set(imageRef, { owner: user.uid, b64, createdAt: serverTimestamp() } satisfies ImageCreate)
     data.imageId = imageRef.id
   }
   batch.set(photoRef, data)

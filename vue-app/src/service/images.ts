@@ -24,8 +24,7 @@ function blobToBase64(blob: Blob): Promise<string> {
  * Redimensionne l'image (côté le plus long = maxSide px) et l'encode en JPEG.
  * Si le résultat dépasse maxChars : baisse la qualité, puis réduit encore les dimensions.
  */
-async function imageToBase64(file: Blob, maxSide: number, maxChars: number): Promise<string> {
-  const bitmap = await createImageBitmap(file)
+async function imageToBase64(bitmap: ImageBitmap, maxSide: number, maxChars: number): Promise<string> {
   let side = maxSide
   for (let attempt = 0; attempt < 8; attempt++) {
     const scale = Math.min(1, side / Math.max(bitmap.width, bitmap.height))
@@ -44,14 +43,23 @@ async function imageToBase64(file: Blob, maxSide: number, maxChars: number): Pro
   throw new Error('Image impossible à réduire sous la limite')
 }
 
-/** Miniature 240 px, rangée DANS le document photos/{id} */
-export function creerMiniature(file: File): Promise<string> {
-  return imageToBase64(file, 240, THUMB_MAX_CHARS)
-}
-
-/** Grande image 1280 px, en base64 : rien n'est écrit, c'est creerPhoto qui l'enregistre */
-export function compresserGrandeImage(file: File): Promise<string> {
-  return imageToBase64(file, 1280, IMAGE_MAX_CHARS)
+/**
+ * Prépare les 2 tailles d'une image, en base64 (rien n'est écrit, c'est creerPhoto qui enregistre) :
+ *   thumb : miniature 240 px, rangée DANS le document photos/{id}
+ *   b64   : grande image 1280 px, rangée dans images/{id}
+ * La photo n'est décompressée qu'UNE fois (≈ 48 Mo en mémoire pour 12 mégapixels),
+ * et cette mémoire est libérée tout de suite après, même si la compression échoue.
+ */
+export async function compresserImage(file: File): Promise<{ thumb: string; b64: string }> {
+  const bitmap = await createImageBitmap(file)
+  try {
+    return {
+      thumb: await imageToBase64(bitmap, 240, THUMB_MAX_CHARS),
+      b64: await imageToBase64(bitmap, 1280, IMAGE_MAX_CHARS),
+    }
+  } finally {
+    bitmap.close()
+  }
 }
 
 /** Référence images/{id} ; sans id, Firestore en génère un nouveau (sans rien écrire) */
