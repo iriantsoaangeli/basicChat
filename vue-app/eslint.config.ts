@@ -22,5 +22,13 @@ export default defineConfigWithVueTs(
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 
+  {
+    name: 'app/ionic',
+    rules: {
+      // Ionic utilise les slots natifs des web components : NE PAS convertir en v-slot
+      'vue/no-deprecated-slot-attribute': 'off',
+    },
+  },
+
   skipFormatting,
 )

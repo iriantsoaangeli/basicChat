@@ -37,3 +37,12 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Firebase (générés par la CLI / les émulateurs, propres à chaque machine)
+.firebase/
+firebase-debug.log*
+firebase-debug.*.log*
+firestore-debug.log*
+ui-debug.log*
+emulator-data/
+firebase-export-*/
