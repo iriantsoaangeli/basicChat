@@ -1,0 +1,30 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "photos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "owner",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    {
+      "collectionGroup": "images",
+      "fieldPath": "b64",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "photos",
+      "fieldPath": "thumb",
+      "indexes": []
+    }
+  ]
+}
