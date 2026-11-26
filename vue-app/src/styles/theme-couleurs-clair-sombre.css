@@ -5,7 +5,7 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 1 : Comment ça marche ?
+   1. Comment ça marche ?
    ---------------------------------------------------------------- */
 
 /* Une variable CSS se déclare avec deux tirets : --nom: valeur;   */
@@ -16,7 +16,7 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 2 : Deux familles de variables
+   2. Deux familles de variables
    ---------------------------------------------------------------- */
 
 /* --ion-...  : variables d'Ionic, lues par ses composants         */
@@ -28,7 +28,7 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 3 : Le mode clair (par défaut)
+   3. Le mode clair (par défaut)
    ---------------------------------------------------------------- */
 
 /* :root = la racine de la page. Ces valeurs s'appliquent partout  */
@@ -41,17 +41,16 @@
    --ion-background-color: #f4f5f8;
    --ion-text-color: #1e1e1e;
 
-   /* Header (utilisé par AppHeader) */
+   /* Barres du haut et du bas (utilisé par AppHeader et AppFooter) */
    --app-header-bg: #ffffff;
    --app-header-text: #1e1e1e;
 
-   /* Cartes (utilisé par GalerieView) */
+   /* Cartes (utilisé par PhotoCard) */
    --app-card-bg: #ffffff;
 
-   /* Zone image des cartes : dégradé de --app-accent-start vers --app-accent-end */
+   /* Carte sans image : dégradé de --app-accent-start vers --app-accent-end */
    --app-accent-start: #5b8def;
    --app-accent-end: #8e5bef;
-   --app-accent-text: #ffffff;
 
    /* Chat style messagerie (ChatBubble, ChatBox, ChatInput, ChatView) */
    --app-chat-bg: #ffffff;
@@ -76,7 +75,7 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 4 : Le mode sombre
+   4. Le mode sombre
    ---------------------------------------------------------------- */
 
 /* @media (prefers-color-scheme: dark) s'active tout seul quand    */
@@ -116,15 +115,15 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 5 : Tester et ajouter une couleur
+   5. Tester et ajouter une couleur
    ---------------------------------------------------------------- */
 
 /* Tester : passe ton système en sombre, ou dans Chrome            */
 /* DevTools > ⋮ > More tools > Rendering >                         */
 /* "Emulate CSS media feature prefers-color-scheme".               */
 /* Ajouter une couleur :                                           */
-/*   1. la déclarer dans :root (leçon 3)                           */
-/*   2. si elle doit changer en sombre, la redéclarer (leçon 4)    */
+/*   1. la déclarer dans :root (point 3)                           */
+/*   2. si elle doit changer en sombre, la redéclarer (point 4)    */
 /*   3. l'utiliser dans le composant avec var(--app-ma-couleur)    */
 /*   4. l'ajouter dans l'annuaire ci-dessous                       */
 
@@ -135,20 +134,39 @@
 
 /* Tous les fichiers CSS sont dans src/styles/ :                   */
 /*   theme-couleurs-clair-sombre.css   ce fichier (les couleurs)   */
-/*   composant-app-header.css          style de AppHeader          */
-/*   page-galerie.css                  style de GalerieView        */
+/*   composant-barres-header-footer.css  AppHeader + AppFooter     */
+/*   composant-photo-card.css          style de PhotoCard          */
+/*   composant-list-photo.css          style de ListPhoto          */
+/*   composant-photo-grand.css         style de PhotoGrand         */
 
 /* AppHeader     src/components/AppHeader.vue                      */
-/*   style dans    src/styles/composant-app-header.css             */
-/*   --app-header-bg       fond de la barre                        */
+/* AppFooter     src/components/AppFooter.vue                      */
+/*   style dans    src/styles/composant-barres-header-footer.css   */
+/*   --app-header-bg       fond des deux barres                    */
 /*   --app-header-text     texte gauche et droite                  */
 
+/* BadgeConnexion src/components/BadgeConnexion.vue                */
+/*   affiché dans  AppHeader                                       */
+/*   visible hors ligne seulement ; ion-badge couleur danger       */
+
 /* GalerieView   src/views/template/GalerieView.vue                */
-/*   style dans    src/styles/page-galerie.css                     */
-/*   --app-card-bg         fond des cartes                         */
-/*   --app-accent-start    début du dégradé de la zone image       */
-/*   --app-accent-end      fin du dégradé de la zone image         */
-/*   --app-accent-text     numéro affiché dans la zone image       */
+/*   aucun style propre : tout vient de ses composants             */
+
+/* ListPhoto     src/components/photo/ListPhoto.vue                */
+/*   style dans    src/styles/composant-list-photo.css             */
+/*   (grille uniquement, aucune variable de couleur)               */
+
+/* PhotoCard     src/components/photo/PhotoCard.vue                */
+/*   style dans    src/styles/composant-photo-card.css             */
+/*   --app-card-bg         fond de la carte                        */
+/*   --app-accent-start    début du dégradé (carte sans image)     */
+/*   --app-accent-end      fin du dégradé (carte sans image)       */
+
+/* PhotoGrand    src/components/photo/PhotoGrand.vue               */
+/*   route         /template/photo/:id                             */
+/*   style dans    src/styles/composant-photo-grand.css            */
+/*   + réutilise   src/styles/composant-photo-card.css (dégradé)   */
+/*   --app-accent-start / --app-accent-end   photo sans image      */
 
 /* Toute l'app   (composants Ionic)                                */
 /*   --ion-color-primary       couleur d'accent                    */

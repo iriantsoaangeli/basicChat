@@ -1,0 +1,45 @@
+/* ================================================================
+   STYLE DU COMPOSANT PhotoCard (carte avec image, nom, description)
+   Utilisé par : src/components/photo/PhotoCard.vue
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   1. Le fond de la carte
+   ---------------------------------------------------------------- */
+
+/* Comme pour le header, ion-card se colore avec --background.     */
+/* La couleur vient du thème (theme-couleurs-clair-sombre.css),    */
+/* donc elle change toute seule en mode sombre.                    */
+ion-card {
+  --background: var(--app-card-bg);
+}
+
+
+/* ----------------------------------------------------------------
+   2. La zone photo
+   ---------------------------------------------------------------- */
+
+/* .photo sert à la fois pour la vraie <img> et pour le dégradé    */
+/* affiché quand il n'y a pas d'image : les deux ont la même forme.*/
+/* aspect-ratio: 4 / 3 garde toujours la même forme, quelle que    */
+/* soit la largeur de la carte.                                    */
+/* object-fit: cover remplit la zone sans déformer l'image         */
+/* (elle est recadrée si ses proportions sont différentes).        */
+.photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+
+/* ----------------------------------------------------------------
+   3. Quand il n'y a pas d'image
+   ---------------------------------------------------------------- */
+
+/* Si la prop "image" est vide, PhotoCard affiche ce dégradé.      */
+/* Ses couleurs viennent du thème, donc il suit le mode sombre.    */
+.photo-vide {
+  background: linear-gradient(135deg, var(--app-accent-start), var(--app-accent-end));
+}

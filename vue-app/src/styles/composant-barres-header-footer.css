@@ -1,20 +1,24 @@
 /* ================================================================
-   STYLE DU COMPOSANT AppHeader (barre du haut)
+   STYLE DES BARRES DU HAUT ET DU BAS (header + footer)
    Utilisé par : src/components/AppHeader.vue
+                 src/components/AppFooter.vue
    ================================================================ */
 
 
 /* ----------------------------------------------------------------
-   LEÇON 1 : Pourquoi ce fichier est "scoped"
+   1. Pourquoi ce fichier est "scoped"
    ---------------------------------------------------------------- */
 
-/* AppHeader.vue charge ce fichier avec <style scoped src="...">.  */
-/* "scoped" veut dire : ces règles ne touchent QUE le header,      */
-/* même si une autre page utilise aussi ion-toolbar.               */
+/* AppHeader.vue et AppFooter.vue chargent ce fichier avec        */
+/* <style scoped src="...">. "scoped" veut dire : ces règles ne    */
+/* touchent QUE ces deux composants, même si une autre page        */
+/* utilise aussi ion-toolbar.                                      */
+/* Les deux barres ont la même structure, donc un seul fichier :   */
+/* pas de CSS dupliqué.                                            */
 
 
 /* ----------------------------------------------------------------
-   LEÇON 2 : Les couleurs de la barre
+   2. Les couleurs de la barre
    ---------------------------------------------------------------- */
 
 /* Les composants Ionic ne se colorent pas avec background/color,  */
@@ -28,10 +32,11 @@ ion-toolbar {
 
 
 /* ----------------------------------------------------------------
-   LEÇON 3 : Le texte gauche et droite
+   3. Le texte gauche et droite
    ---------------------------------------------------------------- */
 
-/* .header-text est la classe des deux zones (slot start / end).   */
+/* .header-text est la classe des zones gauche et droite          */
+/* (slot start / end), dans le header comme dans le footer.        */
 /* Le padding évite que le texte colle aux bords de l'écran.       */
 .header-text {
   padding: 0 16px;

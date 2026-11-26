@@ -2,8 +2,48 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ---------- Fonctions utilitaires ----------
     function signedIn() { return request.auth != null; }
     function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // ---------- photos/{photoId} : nom, description, miniature ----------
+    // Limites identiques à src/type/photo.ts (NOM_MAX, DESCRIPTION_MAX, THUMB_MAX_CHARS)
+    function validPhoto(d) {
+      return d.keys().hasAll(['owner', 'nom', 'createdAt', 'updatedAt'])
+          && d.keys().hasOnly(['owner', 'nom', 'description', 'thumb', 'imageId', 'createdAt', 'updatedAt'])
+          && d.nom is string && d.nom.size() > 0 && d.nom.size() <= 100
+          && (!('description' in d) || (d.description is string && d.description.size() <= 500))
+          && (!('thumb' in d) || (d.thumb is string && d.thumb.size() <= 30000))
+          && (!('imageId' in d) || d.imageId is string);
+    }
+
+    match /photos/{photoId} {
+      // Lire : seulement ses propres photos (la requête doit filtrer sur owner == moi)
+      allow read: if isOwner(resource.data.owner);
+
+      // Créer : en son nom, données valides, dates = heure du serveur
+      allow create: if isOwner(request.resource.data.owner)
+                    && validPhoto(request.resource.data)
+                    && request.resource.data.createdAt == request.time
+                    && request.resource.data.updatedAt == request.time;
+
+      // Supprimer : ses photos
+      allow delete: if isOwner(resource.data.owner);
+      // pas de update : l'app ne modifie pas encore une photo
+    }
+
+    // ---------- images/{imageId} : grande image en base64 ----------
+    // Limite identique à IMAGE_MAX_CHARS dans src/type/photo.ts
+    match /images/{imageId} {
+      allow read:   if isOwner(resource.data.owner);
+      allow create: if isOwner(request.resource.data.owner)
+                    && request.resource.data.keys().hasOnly(['owner', 'b64', 'createdAt'])
+                    && request.resource.data.b64 is string
+                    && request.resource.data.b64.size() <= 700000
+                    && request.resource.data.createdAt == request.time;
+      allow delete: if isOwner(resource.data.owner);
+      // pas de update : une image ne se modifie pas, on en crée une nouvelle
+    }
 
     // ---------- messages/{id} : le chat avec Gemini, un historique par utilisateur ----------
     // owner = l'uid de la personne à qui appartient la conversation

@@ -1,0 +1,28 @@
+/* ================================================================
+   STYLE DU COMPOSANT ListPhoto (recherche + tri + grille)
+   Utilisé par : src/components/photo/ListPhoto.vue
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   1. La grille, toujours 4 colonnes
+   ---------------------------------------------------------------- */
+
+/* La recherche et le tri n'ont besoin d'aucun CSS : ce sont des  */
+/* composants Ionic (ion-searchbar, ion-segment, ion-toolbar).     */
+/* Les cartes elles-mêmes sont stylées dans                        */
+/* composant-photo-card.css ; ici, seulement leur disposition.     */
+/* display: grid range les cartes en colonnes.                     */
+/* repeat(4, ...) = 4 colonnes, quelle que soit la taille de       */
+/* l'écran : pas de media query, les cartes grandissent avec       */
+/* l'espace disponible.                                            */
+/* minmax(0, 1fr) = chaque colonne prend une part égale.           */
+/* Le 0 autorise une colonne à rétrécir sous la taille de son      */
+/* contenu : un long mot ne peut pas élargir une colonne et faire  */
+/* déborder la grille sur un petit écran.                          */
+.liste-grille {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px;
+}
