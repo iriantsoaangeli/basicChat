@@ -35,20 +35,27 @@ const photo = ref<Photo | null>() // undefined = en cours, null = n'existe pas
 const image = ref<string>() // src de l'image affichée (miniature, puis grande image)
 const erreur = ref<string | null>(null)
 
+// Après chaque attente, on vérifie qu'on regarde toujours la même photo :
+// sinon la réponse est périmée (on est passé à une autre photo entre-temps) et on l'ignore
 async function charger(id: string) {
+  const toujoursLaMeme = () => props.id === id
   erreur.value = null
+  photo.value = undefined
   image.value = undefined
   try {
     // Déjà chargée par la galerie ? Sinon (lien ouvert directement) : 1 lecture Firestore
-    photo.value = trouver(id) ?? (await lirePhoto(id))
-    if (!photo.value) return
+    const trouvee = trouver(id) ?? (await lirePhoto(id))
+    if (!toujoursLaMeme()) return
+    photo.value = trouvee
+    if (!trouvee) return
     // La miniature s'affiche tout de suite, la grande image la remplace dès qu'elle arrive
-    if (photo.value.thumb) image.value = toSrc(photo.value.thumb)
-    if (photo.value.imageId) {
-      const b64 = await lireImage(photo.value.imageId)
-      if (b64 && props.id === id) image.value = toSrc(b64)
+    if (trouvee.thumb) image.value = toSrc(trouvee.thumb)
+    if (trouvee.imageId) {
+      const b64 = await lireImage(trouvee.imageId)
+      if (b64 && toujoursLaMeme()) image.value = toSrc(b64)
     }
   } catch (e) {
+    if (!toujoursLaMeme()) return
     erreur.value = errorMessage(e)
     console.error(e)
   }
