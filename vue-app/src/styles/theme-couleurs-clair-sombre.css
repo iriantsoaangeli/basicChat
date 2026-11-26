@@ -41,7 +41,7 @@
   --ion-background-color: #f4f5f8;
   --ion-text-color: #1e1e1e;
 
-  /* Header (utilisé par AppHeader) */
+  /* Barres du haut et du bas (utilisé par AppHeader et AppFooter) */
   --app-header-bg: #ffffff;
   --app-header-text: #1e1e1e;
 
@@ -102,12 +102,13 @@
 
 /* Tous les fichiers CSS sont dans src/styles/ :                   */
 /*   theme-couleurs-clair-sombre.css   ce fichier (les couleurs)   */
-/*   composant-app-header.css          style de AppHeader          */
+/*   composant-barres-header-footer.css  AppHeader + AppFooter     */
 /*   page-galerie.css                  style de GalerieView        */
 
 /* AppHeader     src/components/AppHeader.vue                      */
-/*   style dans    src/styles/composant-app-header.css             */
-/*   --app-header-bg       fond de la barre                        */
+/* AppFooter     src/components/AppFooter.vue                      */
+/*   style dans    src/styles/composant-barres-header-footer.css   */
+/*   --app-header-bg       fond des deux barres                    */
 /*   --app-header-text     texte gauche et droite                  */
 
 /* GalerieView   src/views/template/GalerieView.vue                */
