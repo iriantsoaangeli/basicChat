@@ -4,8 +4,6 @@ import {
   IonButton,
   IonButtons,
   IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonLabel,
   IonSearchbar,
   IonSegment,
@@ -13,7 +11,6 @@ import {
   IonSpinner,
   IonText,
   IonToolbar,
-  type InfiniteScrollCustomEvent,
 } from '@ionic/vue'
 import { arrowDown, arrowUp } from 'ionicons/icons'
 import PhotoCard from '@/components/photo/PhotoCard.vue'
@@ -22,7 +19,7 @@ import type { ChampTri, ChampTriable, Photo, Tri } from '@/type/photo'
 
 // photos     : les photos déjà chargées (le parent les charge par lots)
 // champs     : les champs proposés pour le tri
-// encore     : reste-t-il un lot à charger ? (sinon le défilement infini s'arrête)
+// encore     : reste-t-il un lot à charger ? (sinon le bouton « Charger plus » disparaît)
 // chargement / erreur : état du chargement en cours
 const props = withDefaults(
   defineProps<{
@@ -38,8 +35,8 @@ const props = withDefaults(
 // v-model:tri : le tri choisi (usePhotos retrie les photos chargées quand il change)
 const tri = defineModel<Tri>('tri', { required: true })
 
-// plus : le parent charge le lot suivant, puis appelle fini()
-const emit = defineEmits<{ plus: [fini: () => void] }>()
+// plus : le parent charge le lot suivant
+const emit = defineEmits<{ plus: [] }>()
 
 const champActif = computed({
   get: () => tri.value.champ,
@@ -59,10 +56,6 @@ const photosAffichees = computed(() => {
   if (!terme) return props.photos
   return props.photos.filter((p) => normaliser(`${p.nom} ${p.description ?? ''}`).includes(terme))
 })
-
-function lotSuivant(event: InfiniteScrollCustomEvent) {
-  emit('plus', () => event.target.complete())
-}
 </script>
 
 <template>
@@ -114,10 +107,13 @@ function lotSuivant(event: InfiniteScrollCustomEvent) {
       </p>
     </ion-text>
 
-    <!-- Défilement infini : arrivé en bas, on demande le lot suivant au parent -->
-    <ion-infinite-scroll :disabled="!encore" @ion-infinite="lotSuivant">
-      <ion-infinite-scroll-content loading-text="Chargement des photos suivantes…" />
-    </ion-infinite-scroll>
+    <!-- Tout en bas de la liste : charger les 8 suivantes (même bouton sur mobile et PC) -->
+    <div v-if="encore" class="ion-padding ion-text-center">
+      <ion-button fill="outline" :disabled="chargement" @click="emit('plus')">
+        <ion-spinner v-if="chargement" slot="start" name="crescent" />
+        Charger plus
+      </ion-button>
+    </div>
   </div>
 </template>
 

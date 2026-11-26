@@ -66,7 +66,7 @@ function charger() {
   return chargerLot(false)
 }
 
-/** Ajoute le lot suivant (défilement infini) */
+/** Ajoute le lot suivant (bouton « Charger plus ») */
 function chargerPlus() {
   if (!encore.value || chargement.value) return Promise.resolve()
   return chargerLot(true)

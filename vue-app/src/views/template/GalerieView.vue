@@ -33,11 +33,6 @@ const champs: ChampTri[] = [
 // Premier lot de 8 à l'ouverture de la galerie
 onMounted(charger)
 
-async function lotSuivant(fini: () => void) {
-  await chargerPlus()
-  fini()
-}
-
 // Fenêtre d'ajout ouverte par le bouton Upload du header
 const formulaireOuvert = ref(false)
 const envoiEnCours = ref(false)
@@ -80,7 +75,7 @@ async function enregistrer(photo: NouvellePhoto) {
         :encore="encore"
         :chargement="chargement"
         :erreur="erreur"
-        @plus="lotSuivant"
+        @plus="chargerPlus"
       />
     </ion-content>
 
