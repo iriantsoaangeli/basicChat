@@ -50,7 +50,7 @@ export interface PhotoCreate extends CreateDocument {
 export interface NouvellePhoto {
   nom: string
   description?: string
-  fichier?: File // l'image choisie, compressée seulement à l'envoi
+  fichier: File // l'image choisie (obligatoire), compressée seulement à l'envoi
 }
 
 // ---------- images/{id} : la grande image ----------

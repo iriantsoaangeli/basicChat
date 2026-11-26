@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
-import { IonButton, IonIcon, IonInput, IonList, IonTextarea, IonItem } from '@ionic/vue'
+import { IonButton, IonIcon, IonInput, IonItem, IonList, IonText, IonTextarea } from '@ionic/vue'
 import { imageOutline } from 'ionicons/icons'
 import PhotoCard from '@/components/photo/PhotoCard.vue'
 import { DESCRIPTION_MAX, NOM_MAX, type NouvellePhoto } from '@/type/photo'
 
-// Formulaire d'ajout d'une photo : nom (obligatoire), description, image
+// Formulaire d'ajout d'une photo : nom et image obligatoires, description facultative
 // valider → renvoie les données remplies ; le parent décide quoi en faire
 // desactive : bloque l'envoi (ex. pas d'internet, envoi déjà en cours)
 defineProps<{ desactive?: boolean }>()
@@ -17,7 +17,7 @@ const fichier = ref<File>()
 const apercu = ref('') // URL locale (blob:...) du fichier, seulement pour l'aperçu
 const champFichier = ref<HTMLInputElement>()
 
-const valide = computed(() => nom.value.trim() !== '')
+const valide = computed(() => nom.value.trim() !== '' && fichier.value !== undefined)
 
 function choisirImage(event: Event) {
   const choisi = (event.target as HTMLInputElement).files?.[0]
@@ -29,7 +29,7 @@ function choisirImage(event: Event) {
 
 // Le fichier lui-même est envoyé : la compression en base64 se fait à l'enregistrement
 function valider() {
-  if (!valide.value) return
+  if (!valide.value || !fichier.value) return
   emit('valider', {
     nom: nom.value.trim(),
     description: description.value.trim() || undefined,
@@ -80,6 +80,10 @@ onBeforeUnmount(() => {
         <ion-icon slot="start" :icon="imageOutline" />
         {{ fichier ? "Changer l'image" : 'Choisir une image' }}
       </ion-button>
+      <!-- Indique ce qui manque tant qu'Enregistrer est grisé -->
+      <ion-text v-if="!valide" color="medium">
+        <p class="ion-text-center">Le nom et l'image sont obligatoires.</p>
+      </ion-text>
       <ion-button expand="block" type="submit" :disabled="!valide || desactive">Enregistrer</ion-button>
     </div>
   </form>

@@ -73,14 +73,14 @@ export async function creerPhoto(nouvelle: NouvellePhoto): Promise<string> {
   }
   // Firestore refuse les champs undefined : on n'ajoute que ce qui est rempli
   if (nouvelle.description) data.description = nouvelle.description
-  if (nouvelle.fichier) {
-    // Toute la compression d'abord : si elle échoue, rien n'a été écrit
-    const { thumb, b64 } = await compresserImage(nouvelle.fichier)
-    data.thumb = thumb // petite image, pour la galerie
-    const imageRef = refImage() // grande image, pour PhotoGrand
-    batch.set(imageRef, { owner: user.uid, b64, createdAt: serverTimestamp() } satisfies ImageCreate)
-    data.imageId = imageRef.id
-  }
+
+  // Toute la compression d'abord : si elle échoue, rien n'a été écrit
+  const { thumb, b64 } = await compresserImage(nouvelle.fichier)
+  data.thumb = thumb // petite image, pour la galerie
+  const imageRef = refImage() // grande image, pour PhotoGrand
+  batch.set(imageRef, { owner: user.uid, b64, createdAt: serverTimestamp() } satisfies ImageCreate)
+  data.imageId = imageRef.id
+
   batch.set(photoRef, data)
   await batch.commit()
   return photoRef.id
