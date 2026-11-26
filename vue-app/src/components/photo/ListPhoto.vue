@@ -88,6 +88,7 @@ const photosAffichees = computed(() => {
         :nom="photo.nom"
         :description="photo.description"
         :image="photo.image"
+        :lien="`/template/photo/${photo.id}`"
       />
     </div>
 

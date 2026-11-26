@@ -11,6 +11,13 @@ const routes: RouteRecordRaw[] = [
     name: 'template-galerie',
     component: () => import('../views/template/GalerieView.vue'),
   },
+  {
+    // Une photo en grand ; props: true passe :id au composant comme prop
+    path: '/template/photo/:id',
+    name: 'template-photo',
+    component: () => import('../components/photo/PhotoGrand.vue'),
+    props: true,
+  },
 ]
 
 const router = createRouter({

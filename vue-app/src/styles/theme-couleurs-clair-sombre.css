@@ -104,6 +104,7 @@
 /*   composant-barres-header-footer.css  AppHeader + AppFooter     */
 /*   composant-photo-card.css          style de PhotoCard          */
 /*   composant-list-photo.css          style de ListPhoto          */
+/*   composant-photo-grand.css         style de PhotoGrand         */
 
 /* AppHeader     src/components/AppHeader.vue                      */
 /* AppFooter     src/components/AppFooter.vue                      */
@@ -123,6 +124,12 @@
 /*   --app-card-bg         fond de la carte                        */
 /*   --app-accent-start    début du dégradé (carte sans image)     */
 /*   --app-accent-end      fin du dégradé (carte sans image)       */
+
+/* PhotoGrand    src/components/photo/PhotoGrand.vue               */
+/*   route         /template/photo/:id                             */
+/*   style dans    src/styles/composant-photo-grand.css            */
+/*   + réutilise   src/styles/composant-photo-card.css (dégradé)   */
+/*   --app-accent-start / --app-accent-end   photo sans image      */
 
 /* Toute l'app   (composants Ionic)                                */
 /*   --ion-color-primary       couleur d'accent                    */

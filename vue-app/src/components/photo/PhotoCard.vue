@@ -6,11 +6,13 @@ defineProps<{
   nom: string
   description?: string
   image?: string // URL de l'image ; si vide, un dégradé s'affiche à la place
+  lien?: string // route ouverte au clic (ex. /template/photo/3) ; sans lien, la carte n'est pas cliquable
 }>()
 </script>
 
 <template>
-  <ion-card>
+  <!-- router-link : navigation Ionic (avec animation) au clic -->
+  <ion-card :router-link="lien" :button="!!lien">
     <img v-if="image" class="photo" :src="image" :alt="nom" />
     <div v-else class="photo photo-vide"></div>
 
