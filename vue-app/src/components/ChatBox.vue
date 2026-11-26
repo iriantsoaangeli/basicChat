@@ -51,7 +51,7 @@ function libelleJour(d: Date): string {
       <ChatBubble :texte="m.texte" :auteur="m.auteur" :date="m.createdAt.toDate()" />
     </template>
 
-    <p v-if="enAttente" class="ecrit" role="status">Gemini écrit…</p>
+    <p v-if="enAttente" class="ecrit" role="status">TchangGPT écrit…</p>
   </div>
 </template>
 

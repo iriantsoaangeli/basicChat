@@ -93,9 +93,9 @@ async function send(texte: string) {
         <div class="entete">
           <span class="entete-avatar" aria-hidden="true">G</span>
           <div class="entete-texte">
-            <span class="entete-nom">Gemini</span>
+            <span class="entete-nom">TchangGPT</span>
             <span class="entete-statut" :class="{ actif: enAttente }">
-              {{ enAttente ? 'écrit…' : 'Gemini' }}
+              {{ enAttente ? 'écrit…' : 'TchangGPT Assistant' }}
             </span>
           </div>
         </div>
