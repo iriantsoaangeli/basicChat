@@ -8,7 +8,10 @@ import {
   IonLoading,
   IonModal,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonToast,
+  type RefresherCustomEvent,
 } from '@ionic/vue'
 import { closeOutline, cloudUploadOutline } from 'ionicons/icons'
 import AppHeader from '@/components/AppHeader.vue'
@@ -32,6 +35,12 @@ const champs: ChampTri[] = [
 
 // Premier lot de 8 à l'ouverture de la galerie
 onMounted(charger)
+
+// Tirer la liste vers le bas : recharge le premier lot depuis Firestore, puis arrête l'indicateur
+async function actualiser(event: RefresherCustomEvent) {
+  await charger()
+  event.target.complete()
+}
 
 // Fenêtre d'ajout ouverte par le bouton Upload du header
 const formulaireOuvert = ref(false)
@@ -68,6 +77,11 @@ async function enregistrer(photo: NouvellePhoto) {
     </AppHeader>
 
     <ion-content>
+      <!-- slot="fixed" : l'indicateur reste en haut, au-dessus de la liste -->
+      <ion-refresher slot="fixed" @ion-refresh="actualiser">
+        <ion-refresher-content />
+      </ion-refresher>
+
       <ListPhoto
         v-model:tri="tri"
         :photos="photos"
