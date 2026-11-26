@@ -45,13 +45,12 @@
   --app-header-bg: #ffffff;
   --app-header-text: #1e1e1e;
 
-  /* Cartes (utilisé par GalerieView) */
+  /* Cartes (utilisé par PhotoCard) */
   --app-card-bg: #ffffff;
 
-  /* Zone image des cartes : dégradé de --app-accent-start vers --app-accent-end */
+  /* Carte sans image : dégradé de --app-accent-start vers --app-accent-end */
   --app-accent-start: #5b8def;
   --app-accent-end: #8e5bef;
-  --app-accent-text: #ffffff;
 }
 
 
@@ -103,6 +102,7 @@
 /* Tous les fichiers CSS sont dans src/styles/ :                   */
 /*   theme-couleurs-clair-sombre.css   ce fichier (les couleurs)   */
 /*   composant-barres-header-footer.css  AppHeader + AppFooter     */
+/*   composant-photo-card.css          style de PhotoCard          */
 /*   page-galerie.css                  style de GalerieView        */
 
 /* AppHeader     src/components/AppHeader.vue                      */
@@ -113,10 +113,13 @@
 
 /* GalerieView   src/views/template/GalerieView.vue                */
 /*   style dans    src/styles/page-galerie.css                     */
-/*   --app-card-bg         fond des cartes                         */
-/*   --app-accent-start    début du dégradé de la zone image       */
-/*   --app-accent-end      fin du dégradé de la zone image         */
-/*   --app-accent-text     numéro affiché dans la zone image       */
+/*   (grille uniquement, aucune variable de couleur)               */
+
+/* PhotoCard     src/components/PhotoCard.vue                      */
+/*   style dans    src/styles/composant-photo-card.css             */
+/*   --app-card-bg         fond de la carte                        */
+/*   --app-accent-start    début du dégradé (carte sans image)     */
+/*   --app-accent-end      fin du dégradé (carte sans image)       */
 
 /* Toute l'app   (composants Ionic)                                */
 /*   --ion-color-primary       couleur d'accent                    */

@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { IonPage, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
+import { IonPage, IonContent } from '@ionic/vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/AppFooter.vue'
 import GithubLink from '@/components/GithubLink.vue'
+import PhotoCard from '@/components/PhotoCard.vue'
 
 // Éléments d'exemple pour la galerie (à remplacer par les vraies données)
+// image : URL de la photo (laisser vide pour afficher le dégradé)
 const items = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
-  titre: `Élément ${i + 1}`,
+  nom: `Élément ${i + 1}`,
   description: 'Description courte',
+  image: '',
 }))
 </script>
 
@@ -18,14 +21,13 @@ const items = Array.from({ length: 8 }, (_, i) => ({
 
     <ion-content>
       <div class="galerie-grid">
-        <ion-card v-for="item in items" :key="item.id">
-          <!-- Zone image : remplacer par <img :src="..." /> -->
-          <div class="placeholder">{{ item.id }}</div>
-          <ion-card-header>
-            <ion-card-title>{{ item.titre }}</ion-card-title>
-            <ion-card-subtitle>{{ item.description }}</ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
+        <PhotoCard
+          v-for="item in items"
+          :key="item.id"
+          :nom="item.nom"
+          :description="item.description"
+          :image="item.image"
+        />
       </div>
     </ion-content>
 

@@ -5,21 +5,11 @@
 
 
 /* ----------------------------------------------------------------
-   LEÇON 1 : Les cartes
+   LEÇON 1 : La grille qui s'adapte à l'écran
    ---------------------------------------------------------------- */
 
-/* Comme pour le header, ion-card se colore avec --background.     */
-/* La couleur vient du thème (theme-couleurs-clair-sombre.css),    */
-/* donc elle change toute seule en mode sombre.                    */
-ion-card {
-  --background: var(--app-card-bg);
-}
-
-
-/* ----------------------------------------------------------------
-   LEÇON 2 : La grille qui s'adapte à l'écran
-   ---------------------------------------------------------------- */
-
+/* Les cartes elles-mêmes sont stylées dans                       */
+/* composant-photo-card.css ; ici, seulement leur disposition.     */
 /* display: grid range les cartes en colonnes.                     */
 /* repeat(auto-fill, minmax(200px, 1fr)) se lit ainsi :           */
 /*   "mets autant de colonnes que possible, chacune au moins       */
@@ -31,24 +21,4 @@ ion-card {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 8px;
   padding: 8px;
-}
-
-
-/* ----------------------------------------------------------------
-   LEÇON 3 : La zone image (en attendant les vraies images)
-   ---------------------------------------------------------------- */
-
-/* aspect-ratio: 4 / 3 garde toujours la même forme, quelle que    */
-/* soit la largeur de la carte.                                    */
-/* Flex + align-items + justify-content centrent le numéro.        */
-/* Quand tu mettras une vraie <img>, garde aspect-ratio et ajoute  */
-/* object-fit: cover; pour que l'image remplisse sans se déformer. */
-.placeholder {
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  color: var(--app-accent-text);
-  background: linear-gradient(135deg, var(--app-accent-start), var(--app-accent-end));
 }
