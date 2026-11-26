@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
+import { IonPage, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonButton } from '@ionic/vue'
 import AppHeader from '@/components/AppHeader.vue'
 
 // Éléments d'exemple pour la galerie (à remplacer par les vraies données)
@@ -12,7 +12,11 @@ const items = Array.from({ length: 8 }, (_, i) => ({
 
 <template>
   <ion-page>
-    <AppHeader left="Galerie" right="Template" />
+    <AppHeader left="Galerie">
+      <template #right>
+        <ion-button router-link="/chat" fill="clear">Chat</ion-button>
+      </template>
+    </AppHeader>
 
     <ion-content>
       <div class="galerie-grid">

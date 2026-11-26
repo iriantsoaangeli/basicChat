@@ -1,0 +1,94 @@
+/* ================================================================
+   STYLE DU COMPOSANT ChatBox (la liste des messages)
+   Utilisé par : src/components/ChatBox.vue
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   LEÇON 1 : La colonne de messages
+   ---------------------------------------------------------------- */
+
+/* min-height: 100% + justify-content: flex-end : avec peu de      */
+/* messages, ils se posent en BAS de l'écran, près du clavier,     */
+/* comme dans une messagerie. max-width garde une colonne          */
+/* "téléphone" sur un écran d'ordinateur.                          */
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 12px 12px 8px;
+}
+
+
+/* ----------------------------------------------------------------
+   LEÇON 2 : Séparateur de jour ("Aujourd'hui", "Hier"...)
+   ---------------------------------------------------------------- */
+
+/* Il coupe aussi les séries de bulles : le regroupement           */
+/* (voir composant-chat-bubble.css) redémarre à chaque jour.       */
+.jour {
+  align-self: center;
+  margin: 18px 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--app-chat-placeholder);
+}
+.jour:first-child { margin-top: 4px; }
+
+
+/* ----------------------------------------------------------------
+   LEÇON 3 : "Gemini écrit…"
+   ---------------------------------------------------------------- */
+
+/* margin-left 36px = avatar (28px) + espace (8px) :               */
+/* le texte s'aligne sur les bulles de Gemini.                     */
+.ecrit {
+  align-self: flex-start;
+  margin: 10px 0 0 36px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--app-chat-placeholder);
+}
+
+
+/* ----------------------------------------------------------------
+   LEÇON 4 : Conversation vide
+   ---------------------------------------------------------------- */
+
+/* margin: auto dans une colonne flex = centré verticalement */
+.vide {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.vide-avatar {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--app-avatar-gemini);
+  color: var(--app-avatar-text);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.vide-nom {
+  margin: 10px 0 2px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.vide-texte {
+  margin: 0;
+  max-width: 220px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--app-chat-placeholder);
+}

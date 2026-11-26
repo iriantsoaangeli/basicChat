@@ -34,24 +34,44 @@
 /* :root = la racine de la page. Ces valeurs s'appliquent partout  */
 /* tant qu'aucun mode sombre n'est actif.                          */
 :root {
-  /* Couleur principale (boutons, liens, accents) */
-  --ion-color-primary: #5b8def;
+   /* Couleur principale (boutons, liens, accents) */
+   --ion-color-primary: #5b8def;
 
-  /* Fond et texte généraux de la page */
-  --ion-background-color: #f4f5f8;
-  --ion-text-color: #1e1e1e;
+   /* Fond et texte généraux de la page */
+   --ion-background-color: #f4f5f8;
+   --ion-text-color: #1e1e1e;
 
-  /* Header (utilisé par AppHeader) */
-  --app-header-bg: #ffffff;
-  --app-header-text: #1e1e1e;
+   /* Header (utilisé par AppHeader) */
+   --app-header-bg: #ffffff;
+   --app-header-text: #1e1e1e;
 
-  /* Cartes (utilisé par GalerieView) */
-  --app-card-bg: #ffffff;
+   /* Cartes (utilisé par GalerieView) */
+   --app-card-bg: #ffffff;
 
-  /* Zone image des cartes : dégradé de --app-accent-start vers --app-accent-end */
-  --app-accent-start: #5b8def;
-  --app-accent-end: #8e5bef;
-  --app-accent-text: #ffffff;
+   /* Zone image des cartes : dégradé de --app-accent-start vers --app-accent-end */
+   --app-accent-start: #5b8def;
+   --app-accent-end: #8e5bef;
+   --app-accent-text: #ffffff;
+
+   /* Chat style messagerie (ChatBubble, ChatBox, ChatInput, ChatView) */
+   --app-chat-bg: #ffffff;
+   --app-bulle-user-bg: #0a7cff;
+   --app-bulle-user-text: #ffffff;
+   --app-bulle-gemini-bg: #e9e9eb;
+   --app-bulle-gemini-text: #0a0a0a;
+   --app-chat-input-bg: #f0f0f2;
+   --app-chat-input-text: #0a0a0a;
+   --app-chat-placeholder: #8a8a8e;
+   --app-chat-footer-bg: #ffffff;
+   --app-chat-separator: #e5e5ea;
+   --app-code-bg: rgba(0, 0, 0, 0.07);
+
+   /* Participants : Gemini (indigo) et tout autre auteur (ambre) */
+   --app-avatar-gemini: #5b5bd6;
+   --app-avatar-autre: #b86e00;
+   --app-avatar-text: #ffffff;
+   --app-bulle-autre-bg: #fff0d4;
+   --app-bulle-autre-text: #4a3200;
 }
 
 
@@ -64,21 +84,34 @@
 /* On ne redéclare QUE les variables qui changent ; les autres     */
 /* gardent leur valeur du mode clair.                              */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --ion-color-primary: #4d8dff;
+   :root {
+      --ion-color-primary: #4d8dff;
 
-    --ion-background-color: #121212;
-    --ion-text-color: #f1f1f1;
+      --ion-background-color: #121212;
+      --ion-text-color: #f1f1f1;
 
-    --app-header-bg: #1f1f1f;
-    --app-header-text: #f1f1f1;
+      --app-header-bg: #1f1f1f;
+      --app-header-text: #f1f1f1;
 
-    --app-card-bg: #1e1e1e;
+      --app-card-bg: #1e1e1e;
 
-    /* Dégradé un peu plus sombre pour ne pas éblouir */
-    --app-accent-start: #3a5fb0;
-    --app-accent-end: #5e3aa8;
-  }
+      /* Dégradé un peu plus sombre pour ne pas éblouir */
+      --app-accent-start: #3a5fb0;
+      --app-accent-end: #5e3aa8;
+
+      /* Chat : fond noir pur comme les messageries natives, bulle user reste bleue */
+      --app-chat-bg: #000000;
+      --app-bulle-gemini-bg: #26262a;
+      --app-bulle-gemini-text: #f2f2f7;
+      --app-chat-input-bg: #1c1c1f;
+      --app-chat-input-text: #f2f2f7;
+      --app-chat-placeholder: #8a8a8e;
+      --app-chat-footer-bg: #000000;
+      --app-chat-separator: #26262a;
+      --app-code-bg: rgba(255, 255, 255, 0.1);
+      --app-bulle-autre-bg: #3a2a0c;
+      --app-bulle-autre-text: #ffdf9e;
+   }
 }
 
 

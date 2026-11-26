@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // ---------- messages/{id} : le chat avec Gemini, un historique par utilisateur ----------
+    // owner = l'uid de la personne à qui appartient la conversation
+    // (aussi sur les réponses de Gemini : c'est SA conversation, pas l'auteur du message)
+    match /messages/{id} {
+      // Lire : seulement ses propres messages
+      allow read: if isOwner(resource.data.owner);
+
+      // Créer : en son nom, seulement nos 5 champs, bons types, date = heure du serveur
+      allow create: if isOwner(request.resource.data.owner)
+                    && request.resource.data.keys().hasOnly(['owner', 'texte', 'auteur', 'createdAt', 'updatedAt'])
+                    && request.resource.data.texte is string
+                    && request.resource.data.texte.size() <= 5000
+                    && request.resource.data.auteur in ['user', 'gemini']
+                    && request.resource.data.createdAt == request.time
+                    && request.resource.data.updatedAt == request.time;
+
+      // Pas de update ni de delete : un message ne se modifie pas
+    }
+
+    // Tout le reste : interdit (rien n'est autorisé par défaut)
+  }
+}

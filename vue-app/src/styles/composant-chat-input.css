@@ -1,0 +1,60 @@
+/* ================================================================
+   STYLE DU COMPOSANT ChatInput (le champ de saisie)
+   Utilisé par : src/components/ChatInput.vue
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   LEÇON 1 : Le champ "pilule"
+   ---------------------------------------------------------------- */
+
+/* 16px minimum : en dessous, iOS zoome tout seul sur le champ.     */
+/* min-height 42px : assez haut pour le pouce (Ionic impose 72px). */
+/* max-width + margin auto : aligné sur la colonne de messages.     */
+ion-textarea {
+  display: block;
+  max-width: 616px;
+  min-height: 42px;
+  margin: 0 auto;
+  border-radius: 21px;
+  background: var(--app-chat-input-bg);
+  color: var(--app-chat-input-text);
+  font-size: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 11px;
+  --padding-bottom: 11px;
+  --placeholder-color: var(--app-chat-placeholder);
+  --placeholder-opacity: 1;
+}
+
+
+/* ----------------------------------------------------------------
+   LEÇON 2 : Le curseur clignotant
+   ---------------------------------------------------------------- */
+
+/* Ionic colore le curseur avec --highlight-color.                 */
+/* Si on met cette couleur à "transparent", le curseur disparaît : */
+/* on la met donc au bleu des bulles.                              */
+ion-textarea {
+  --highlight-color-focused: var(--app-bulle-user-bg);
+  --highlight-color-valid: var(--app-bulle-user-bg);
+  --highlight-color-invalid: var(--app-bulle-user-bg);
+}
+
+/* ...et c'est le trait sous le champ qu'on cache, pas la couleur. */
+/* :deep() = atteindre un élément créé par Ionic à l'intérieur.    */
+ion-textarea :deep(.textarea-highlight) {
+  display: none;
+}
+
+
+/* ----------------------------------------------------------------
+   LEÇON 3 : Les messages longs
+   ---------------------------------------------------------------- */
+
+/* Au-delà de ~5 lignes, ça défile dans le champ */
+ion-textarea :deep(textarea) {
+  max-height: 120px;
+  overflow-y: auto;
+}
