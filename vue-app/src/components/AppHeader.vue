@@ -24,5 +24,5 @@ defineProps<{
   </ion-header>
 </template>
 
-<!-- Styles : src/styles/composant-app-header.css -->
-<style scoped src="@/styles/composant-app-header.css"></style>
+<!-- Styles partagés avec AppFooter : src/styles/composant-barres-header-footer.css -->
+<style scoped src="@/styles/composant-barres-header-footer.css"></style>
