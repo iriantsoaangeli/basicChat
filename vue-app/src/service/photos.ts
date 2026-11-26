@@ -1,11 +1,12 @@
 // src/service/photos.ts
-// RÔLE : les opérations sur les photos (créer, lister par lots de 8, lire une photo).
+// RÔLE : les opérations sur les photos (créer, lister par lots de 8, lire, supprimer).
 // Firestore renvoie toujours le même ordre (plus récentes d'abord) : le tri choisi
 // par l'utilisateur est fait dans usePhotos, sur les photos chargées.
 // Les composants n'appellent QUE ces fonctions (via usePhotos), jamais Firestore directement.
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -19,7 +20,7 @@ import {
   type QueryDocumentSnapshot,
 } from 'firebase/firestore'
 import { db, ensureUser } from '@/firebase'
-import { creerMiniature, enregistrerImage } from '@/service/images'
+import { creerMiniature, enregistrerImage, supprimerImage } from '@/service/images'
 import {
   PHOTOS_PAR_LOT,
   type NouvellePhoto,
@@ -98,4 +99,14 @@ export async function listerMesPhotos(apres?: Curseur) {
 export async function lirePhoto(id: string): Promise<Photo | null> {
   const snap = await getDoc(doc(photosRead, id))
   return snap.exists() ? snap.data() : null
+}
+
+/**
+ * SUPPRIMER une photo et sa grande image.
+ * La photo d'abord : si la suite échoue, il reste au pire une image orpheline
+ * (invisible, juste de la place perdue), jamais une photo qui pointe vers une image absente.
+ */
+export async function supprimerPhoto(photo: Photo): Promise<void> {
+  await deleteDoc(doc(photosWrite, photo.id))
+  if (photo.imageId) await supprimerImage(photo.imageId)
 }

@@ -11,7 +11,7 @@
 import { readonly, ref, shallowRef } from 'vue'
 import { Timestamp } from 'firebase/firestore'
 import { errorMessage } from '@/service/errors'
-import { creerPhoto, lirePhoto, listerMesPhotos, type Curseur } from '@/service/photos'
+import { creerPhoto, lirePhoto, listerMesPhotos, supprimerPhoto, type Curseur } from '@/service/photos'
 import type { NouvellePhoto, Photo, Tri } from '@/type/photo'
 
 const photos = shallowRef<Photo[]>([]) // shallow : on remplace le tableau, on ne modifie pas les photos
@@ -89,6 +89,18 @@ async function ajouter(nouvelle: NouvellePhoto): Promise<string | null> {
   }
 }
 
+/** Supprime une photo (et sa grande image) puis la retire de la liste. Renvoie un message d'erreur ou null. */
+async function supprimer(photo: Photo): Promise<string | null> {
+  try {
+    await supprimerPhoto(photo)
+    photos.value = photos.value.filter((p) => p.id !== photo.id)
+    return null
+  } catch (e) {
+    console.error(e)
+    return errorMessage(e)
+  }
+}
+
 /** Une photo déjà chargée (undefined sinon : il faudra la lire dans Firestore) */
 function trouver(id: string) {
   return photos.value.find((p) => p.id === id)
@@ -104,6 +116,7 @@ export function usePhotos() {
     chargerPlus,
     trierPar,
     ajouter,
+    supprimer,
     trouver,
   }
 }

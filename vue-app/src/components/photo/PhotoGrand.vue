@@ -1,7 +1,22 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { IonBackButton, IonButtons, IonContent, IonPage, IonSpinner, IonText } from '@ionic/vue'
+import {
+  IonAlert,
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonIcon,
+  IonLoading,
+  IonPage,
+  IonSpinner,
+  IonText,
+  IonToast,
+  useIonRouter,
+} from '@ionic/vue'
+import { trashOutline } from 'ionicons/icons'
 import AppHeader from '@/components/AppHeader.vue'
+import { useConnexion } from '@/composables/useConnexion'
 import { usePhotos } from '@/composables/usePhotos'
 import { errorMessage } from '@/service/errors'
 import { lireImage, toSrc } from '@/service/images'
@@ -12,7 +27,9 @@ import type { Photo } from '@/type/photo'
 // id vient de l'URL (props: true dans le router)
 const props = defineProps<{ id: string }>()
 
-const { trouver } = usePhotos()
+const { trouver, supprimer } = usePhotos()
+const { enLigne } = useConnexion()
+const ionRouter = useIonRouter()
 
 const photo = ref<Photo | null>() // undefined = en cours, null = n'existe pas
 const image = ref<string>() // src de l'image affichée (miniature, puis grande image)
@@ -38,6 +55,28 @@ async function charger(id: string) {
 }
 
 watch(() => props.id, charger, { immediate: true })
+
+// ---------- Suppression ----------
+const confirmationOuverte = ref(false)
+const suppressionEnCours = ref(false)
+const erreurSuppression = ref<string | null>(null)
+
+// Boutons de la fenêtre de confirmation ; role 'destructive' = affiché en rouge
+const boutonsConfirmation = [
+  { text: 'Annuler', role: 'cancel' },
+  { text: 'Supprimer', role: 'destructive', handler: () => void confirmerSuppression() },
+]
+
+async function confirmerSuppression() {
+  if (!photo.value) return
+  suppressionEnCours.value = true
+  erreurSuppression.value = await supprimer(photo.value)
+  suppressionEnCours.value = false
+  if (erreurSuppression.value) return
+  // Retour à la galerie : page précédente si elle existe, sinon on y va directement
+  if (ionRouter.canGoBack()) ionRouter.back()
+  else ionRouter.navigate('/template/galerie', 'back', 'replace')
+}
 </script>
 
 <template>
@@ -70,6 +109,18 @@ watch(() => props.id, charger, { immediate: true })
             <p>Ajoutée le {{ photo.createdAt.toDate().toLocaleDateString('fr-FR') }}</p>
           </ion-text>
         </div>
+
+        <!-- Hors ligne, la suppression attendrait le retour du réseau : on bloque le bouton -->
+        <ion-button
+          expand="block"
+          color="danger"
+          fill="outline"
+          :disabled="!enLigne"
+          @click="confirmationOuverte = true"
+        >
+          <ion-icon slot="start" :icon="trashOutline" />
+          Supprimer
+        </ion-button>
       </div>
 
       <div v-else-if="photo === undefined" class="ion-padding ion-text-center">
@@ -80,6 +131,23 @@ watch(() => props.id, charger, { immediate: true })
         <p class="ion-padding ion-text-center">Cette photo n'existe pas.</p>
       </ion-text>
     </ion-content>
+
+    <!-- Confirmation avant de supprimer : l'action est définitive -->
+    <ion-alert
+      :is-open="confirmationOuverte"
+      header="Supprimer cette photo ?"
+      :message="`« ${photo?.nom} » sera supprimée définitivement.`"
+      :buttons="boutonsConfirmation"
+      @did-dismiss="confirmationOuverte = false"
+    />
+    <ion-loading :is-open="suppressionEnCours" message="Suppression…" />
+    <ion-toast
+      :is-open="!!erreurSuppression"
+      :message="erreurSuppression ?? ''"
+      color="danger"
+      :duration="5000"
+      @did-dismiss="erreurSuppression = null"
+    />
   </ion-page>
 </template>
 
