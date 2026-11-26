@@ -45,13 +45,20 @@ async function lotSuivant(fini: () => void) {
 // Fenêtre d'ajout ouverte par le bouton Upload du header
 const formulaireOuvert = ref(false)
 const envoiEnCours = ref(false)
-const erreurEnvoi = ref<string | null>(null)
+
+// Résultat de l'upload : message vert (enregistrée) ou rouge (erreur)
+const resultat = ref<{ message: string; couleur: 'success' | 'danger' } | null>(null)
 
 async function enregistrer(photo: NouvellePhoto) {
   envoiEnCours.value = true
-  erreurEnvoi.value = await ajouter(photo)
+  const erreurEnvoi = await ajouter(photo)
   envoiEnCours.value = false
-  if (!erreurEnvoi.value) formulaireOuvert.value = false // en cas d'erreur, on garde le formulaire rempli
+  if (erreurEnvoi) {
+    resultat.value = { message: erreurEnvoi, couleur: 'danger' } // on garde le formulaire rempli
+  } else {
+    resultat.value = { message: 'Photo enregistrée', couleur: 'success' }
+    formulaireOuvert.value = false
+  }
 }
 </script>
 
@@ -106,11 +113,11 @@ async function enregistrer(photo: NouvellePhoto) {
     <!-- Compression + envoi : peut prendre quelques secondes -->
     <ion-loading :is-open="envoiEnCours" message="Envoi de la photo…" />
     <ion-toast
-      :is-open="!!erreurEnvoi"
-      :message="erreurEnvoi ?? ''"
-      color="danger"
-      :duration="5000"
-      @did-dismiss="erreurEnvoi = null"
+      :is-open="!!resultat"
+      :message="resultat?.message"
+      :color="resultat?.couleur"
+      :duration="resultat?.couleur === 'danger' ? 5000 : 2000"
+      @did-dismiss="resultat = null"
     />
   </ion-page>
 </template>
