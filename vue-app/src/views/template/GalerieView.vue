@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { IonPage, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
 import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
+import GithubLink from '@/components/GithubLink.vue'
 
 // Éléments d'exemple pour la galerie (à remplacer par les vraies données)
 const items = Array.from({ length: 8 }, (_, i) => ({
@@ -26,6 +28,12 @@ const items = Array.from({ length: 8 }, (_, i) => ({
         </ion-card>
       </div>
     </ion-content>
+
+    <AppFooter left="ETU003964 · ETU004101">
+      <template #right>
+        <GithubLink url="https://github.com/iriantsoaangeli/basicChat" label="basicChat" />
+      </template>
+    </AppFooter>
   </ion-page>
 </template>
 
