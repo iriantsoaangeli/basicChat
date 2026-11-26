@@ -1,0 +1,39 @@
+/* ================================================================
+   STYLE DU COMPOSANT AppHeader (barre du haut)
+   Utilisé par : src/components/AppHeader.vue
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   LEÇON 1 : Pourquoi ce fichier est "scoped"
+   ---------------------------------------------------------------- */
+
+/* AppHeader.vue charge ce fichier avec <style scoped src="...">.  */
+/* "scoped" veut dire : ces règles ne touchent QUE le header,      */
+/* même si une autre page utilise aussi ion-toolbar.               */
+
+
+/* ----------------------------------------------------------------
+   LEÇON 2 : Les couleurs de la barre
+   ---------------------------------------------------------------- */
+
+/* Les composants Ionic ne se colorent pas avec background/color,  */
+/* mais avec leurs propres variables : --background et --color.    */
+/* On leur passe nos couleurs du thème                             */
+/* (voir theme-couleurs-clair-sombre.css).                         */
+ion-toolbar {
+  --background: var(--app-header-bg);
+  --color: var(--app-header-text);
+}
+
+
+/* ----------------------------------------------------------------
+   LEÇON 3 : Le texte gauche et droite
+   ---------------------------------------------------------------- */
+
+/* .header-text est la classe des deux zones (slot start / end).   */
+/* Le padding évite que le texte colle aux bords de l'écran.       */
+.header-text {
+  padding: 0 16px;
+  font-weight: 500;
+}
