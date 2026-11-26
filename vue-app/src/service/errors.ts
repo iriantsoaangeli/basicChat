@@ -21,3 +21,12 @@ export function errorMessage(e: unknown): string {
   }
   return e instanceof Error ? e.message : String(e)
 }
+
+/**
+ * Lecture d'UN document refusée par les règles ?
+ * Les règles renvoient permission-denied quand le document n'existe pas (resource == null)
+ * ou qu'il appartient à quelqu'un d'autre : pour l'utilisateur, c'est "introuvable".
+ */
+export function estRefuse(e: unknown): boolean {
+  return e instanceof FirebaseError && e.code === 'permission-denied'
+}

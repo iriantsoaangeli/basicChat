@@ -20,6 +20,7 @@ import {
   type QueryDocumentSnapshot,
 } from 'firebase/firestore'
 import { db, ensureUser } from '@/firebase'
+import { estRefuse } from '@/service/errors'
 import { creerMiniature, enregistrerImage, supprimerImage } from '@/service/images'
 import {
   PHOTOS_PAR_LOT,
@@ -95,10 +96,18 @@ export async function listerMesPhotos(apres?: Curseur) {
   }
 }
 
-/** LIRE une photo par son id (null si elle n'existe pas) */
+/**
+ * LIRE une photo par son id.
+ * null si elle n'existe pas (ou n'est pas à nous : les règles répondent alors "refusé").
+ */
 export async function lirePhoto(id: string): Promise<Photo | null> {
-  const snap = await getDoc(doc(photosRead, id))
-  return snap.exists() ? snap.data() : null
+  try {
+    const snap = await getDoc(doc(photosRead, id))
+    return snap.exists() ? snap.data() : null
+  } catch (e) {
+    if (estRefuse(e)) return null
+    throw e
+  }
 }
 
 /**

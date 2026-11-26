@@ -12,6 +12,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore'
 import { db, ensureUser } from '@/firebase'
+import { estRefuse } from '@/service/errors'
 import { IMAGE_MAX_CHARS, THUMB_MAX_CHARS, type ImageCreate } from '@/type/photo'
 
 const imagesCol = collection(db, 'images')
@@ -67,7 +68,10 @@ export async function enregistrerImage(file: File): Promise<string> {
   return ref.id
 }
 
-/** Lit une grande image : cache du téléphone d'abord (gratuit), sinon Firestore (1 lecture) */
+/**
+ * Lit une grande image : cache du téléphone d'abord (gratuit), sinon Firestore (1 lecture).
+ * null si elle n'existe pas (ou n'est pas à nous : les règles répondent alors "refusé").
+ */
 export async function lireImage(imageId: string): Promise<string | null> {
   const ref = doc(imagesCol, imageId)
   try {
@@ -76,8 +80,13 @@ export async function lireImage(imageId: string): Promise<string | null> {
   } catch {
     // pas dans le cache → on va chercher sur le serveur
   }
-  const snap = await getDoc(ref)
-  return snap.exists() ? (snap.get('b64') as string) : null
+  try {
+    const snap = await getDoc(ref)
+    return snap.exists() ? (snap.get('b64') as string) : null
+  } catch (e) {
+    if (estRefuse(e)) return null
+    throw e
+  }
 }
 
 export function supprimerImage(imageId: string): Promise<void> {
